@@ -5,7 +5,11 @@
 }
 
 .vfrc-header {
-  height: 60px !important;
+  height: 80px !important; /* Nagyobb magasság */
   background-color: white !important;
   border-bottom: 3px solid rgb(89, 128, 144) !important;
+}
+
+.vfrc-icon {
+  color: rgb(89, 128, 144); /* Ugyanaz a szín, mint a körvonal */
 }
