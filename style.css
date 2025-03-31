@@ -1,11 +1,5 @@
-.vfrc-system-response .vfrc-message {
-    background-color: black;
-    color: white;
-}
-
-.vfrc-header {
-    min-height: 80px !important;
-    max-height: 80px !important;
-    line-height: 80px !important;
-    background-color: green !important;
+.vfrc-chat {
+  border: 3px solid rgb(89, 128, 144) !important;
+  border-radius: 10px !important;
+  background-color: rgb(240, 240, 240);
 }
