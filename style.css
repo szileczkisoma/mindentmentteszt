@@ -74,11 +74,41 @@
   word-break: break-word !important;
   text-align: left !important;
   height: fit-content !important;
-  border: 1px solid #f86c07 !important; /* Vékony narancssárga körvonal */
+  border: 1px solid #f86c07 !important;
   outline: transparent 0px !important;
 }
 
 .vfrc-system-response--actions .o231sh1:first-child .vfrc-button:hover {
-  background-color: #fdd8c3 !important; /* Sötétebb háttér (eredeti #fef0e6-ból) */
-  color: #d95a00 !important; /* Sötétebb narancssárga szöveg (eredeti #f86c07-ből) */
+  background-color: #fdd8c3 !important;
+  color: #d95a00 !important;
+}
+
+.vfrc-prompt .vfrc-button:first-child {
+  position: relative !important;
+  color: transparent !important;
+}
+
+.vfrc-prompt .vfrc-button:first-child::before {
+  content: "Új csevegés indítása" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #ffffff !important;
+}
+
+.vfrc-prompt .vfrc-button:nth-child(2) {
+  position: relative !important;
+  color: transparent !important;
+}
+
+.vfrc-prompt .vfrc-button:nth-child(2)::before {
+  content: "Mégse" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #000000 !important;
 }
