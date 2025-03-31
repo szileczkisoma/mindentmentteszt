@@ -5,7 +5,7 @@
 }
 
 .vfrc-header {
-  height: 60px;
-  background-color: white;
+  height: 60px !important;
+  background-color: white !important;
   border-bottom: 3px solid rgb(89, 128, 144) !important;
 }
