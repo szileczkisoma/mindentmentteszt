@@ -8,16 +8,19 @@
   height: 80px !important;
   background-color: white !important;
   border-bottom: 3px solid rgb(72, 174, 225) !important;
-  position: relative; /* Hozzáadva az abszolút pozicionált gyermekhez */
 }
 
 .vfrc-icon {
-  color: rgb(89, 128, 144);
+  color: rgb(72, 174, 225);
 }
 
+/* Style the assistant info title - override with "Dr. Barát" */
 .vfrc-assistant-info--title {
-  color: rgb(72, 174, 225);
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  visibility: hidden; /* Hide original text */
+}
+
+.vfrc-assistant-info--title::before {
+  content: "Dr. Barát"; /* New text */
+  visibility: visible; /* Make pseudo-element visible */
+  color: rgb(72, 174, 225); /* Updated color */
 }
