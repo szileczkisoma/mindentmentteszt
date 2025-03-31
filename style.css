@@ -1,26 +1,79 @@
 .vfrc-chat {
   border: 3px solid rgb(72, 174, 225) !important;
   border-radius: 10px !important;
-  background-color: rgb(240, 240, 240);
+  background-color: rgb(235, 235, 235);
 }
 
 .vfrc-header {
   height: 80px !important;
+  min-height: 80px !important;
   background-color: white !important;
   border-bottom: 3px solid rgb(72, 174, 225) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.vfrc-header .vfrc-avatar-wrapper {
+  height: 80px;
+  width: 110px;
+  display: block;
+  overflow: hidden;
+}
+
+.vfrc-header .vfrc-avatar {
+  height: 140px;
+  width: 140px;
+  display: block !important;
 }
 
 .vfrc-icon {
   color: rgb(72, 174, 225);
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
 
-/* Style the assistant info title - override with "Dr. Barát" */
-.vfrc-assistant-info--title {
-  visibility: hidden; /* Hide original text */
+.vfrc-header::before {
+  content: "MindentMent Rendelő chat";
+  color: rgb(72, 174, 225);
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-weight: bold;
 }
 
-.vfrc-assistant-info--title::before {
-  content: "Dr. Barát"; /* New text */
-  visibility: visible; /* Make pseudo-element visible */
-  color: rgb(72, 174, 225); /* Updated color */
+.vfrc-avatar:not(.vfrc-header .vfrc-avatar):not(.vfrc-assistant-info .vfrc-avatar) {
+  height: 50px;
+  width: 55px;
+  border: 1px solid rgb(72, 174, 225);
+  display: block;
+  overflow: hidden;
+}
+
+.vfrc-assistant-info .vfrc-avatar {
+  height: 160px;
+  width: 260px;
+  border: 1px solid rgb(72, 174, 225);
+  display: block;
+  overflow: hidden;
+}
+
+.vfrc-assistant-info--description {
+  font-weight: bold;
+  color: rgb(72, 174, 225);
+  font-size: 18px;
+}
+
+.vfrc-choice-container button:first-child {
+  border-radius: 8px !important;
+  color: #f86c07 !important;
+  background-color: #fef0e6 !important;
+  line-height: 20px;
+  padding: 7px 12px 6px;
+  white-space: normal;
+  word-break: break-word;
+  text-align: left;
+  height: fit-content;
+  border: 0 !important;
+  outline: transparent 0px !important;
 }
