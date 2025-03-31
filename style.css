@@ -1,5 +1,5 @@
 .vfrc-chat {
-  border: 3px solid rgb(89, 128, 144) !important;
+  border: 3px solid rgb(72, 174, 225) !important;
   border-radius: 10px !important;
   background-color: rgb(240, 240, 240);
 }
@@ -7,7 +7,7 @@
 .vfrc-header {
   height: 80px !important;
   background-color: white !important;
-  border-bottom: 3px solid rgb(89, 128, 144) !important;
+  border-bottom: 3px solid rgb(72, 174, 225) !important;
   position: relative; /* Hozzáadva az abszolút pozicionált gyermekhez */
 }
 
@@ -16,7 +16,7 @@
 }
 
 .vfrc-assistant-info--title {
-  color: rgb(89, 128, 144);
+  color: rgb(72, 174, 225);
   position: absolute;
   top: 10px;
   right: 10px;
