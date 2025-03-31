@@ -2,3 +2,9 @@
     background-color: black;
     color: white;
 }
+
+.vfrc-header {
+    height: 80px;       /* Magasabb a header */
+    line-height: 80px;  /* Függőlegesen középre igazítja a szöveget */
+    background-color: green; /* Zöld háttér */
+}
