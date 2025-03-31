@@ -64,16 +64,21 @@
   font-size: 18px;
 }
 
-.vfrc-choice-container button:first-child {
+.vfrc-system-response--actions .o231sh1:first-child .vfrc-button {
   border-radius: 8px !important;
   color: #f86c07 !important;
   background-color: #fef0e6 !important;
-  line-height: 20px;
-  padding: 7px 12px 6px;
-  white-space: normal;
-  word-break: break-word;
-  text-align: left;
-  height: fit-content;
-  border: 0 !important;
+  line-height: 20px !important;
+  padding: 7px 12px 6px !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+  text-align: left !important;
+  height: fit-content !important;
+  border: 1px solid #f86c07 !important; /* Vékony narancssárga körvonal */
   outline: transparent 0px !important;
+}
+
+.vfrc-system-response--actions .o231sh1:first-child .vfrc-button:hover {
+  background-color: #fdd8c3 !important; /* Sötétebb háttér (eredeti #fef0e6-ból) */
+  color: #d95a00 !important; /* Sötétebb narancssárga szöveg (eredeti #f86c07-ből) */
 }
