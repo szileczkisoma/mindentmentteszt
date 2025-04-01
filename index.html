@@ -229,23 +229,18 @@
                     url: "https://runtime-api.voiceflow.com"
                 }
             });
-            
-            // Proactive message with 5-second delay and event trigger
+
+            // 5 másodperc késleltetés után történő események
             setTimeout(function() {
-                window.voiceflow.chat.proactive
-                    .push({ 
-                        type: 'text', 
-                        payload: { 
-                            message: 'Van valami kérdése a fogkő-eltávolítással kapcsolatban?' 
-                        } 
-                    });
-                
-                // Trigger event when message appears
+                // Chat ablak megnyitása
+                window.voiceflow.chat.open();
+
+                // 'nemenjel_mosoly' esemény küldése
                 window.voiceflow.chat.interact({
                     type: 'event',
                     payload: {
                         event: {
-                            name: 'Fogko_eltavolitas'
+                            name: 'nemenjel_mosoly'
                         }
                     }
                 });
@@ -255,6 +250,6 @@
         v.type = "text/javascript";
         s.parentNode.insertBefore(v, s);
     })(document, 'script');
-</script>
+    </script>
 </body>
 </html>
