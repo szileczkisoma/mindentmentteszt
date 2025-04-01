@@ -184,7 +184,7 @@
                             submitButton.addEventListener('click', () => {
                                 submitButton.textContent = 'Elküldve';
                                 submitButton.classList.add('submitted');
-                                VoiceflowsubmitButton.disabled = true;
+                                submitButton.disabled = true;
 
                                 console.log('Sending to Voiceflow:', { date: selectedDate }); // Debug
                                 window.voiceflow.chat.interact({
