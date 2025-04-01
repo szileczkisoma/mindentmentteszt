@@ -214,26 +214,47 @@
 
     <!-- Voiceflow Web Chat betöltése -->
     <script type="text/javascript">
-        (function(d, t) {
-            var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
-            v.onload = function() {
-                window.voiceflow.chat.load({
-                    verify: { projectID: '67eb9441e65fd8cb380c11fc' },
-                    url: 'https://general-runtime.voiceflow.com',
-                    assistant: {
-                        extensions: [DateExtension],
-                        stylesheet: "https://szileczkisoma.github.io/mindentmentteszt/style.css"
-                    },
-                    versionID: 'production',
-                    voice: {
-                        url: "https://runtime-api.voiceflow.com"
+    (function(d, t) {
+        var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+        v.onload = function() {
+            window.voiceflow.chat.load({
+                verify: { projectID: '67eb9441e65fd8cb380c11fc' },
+                url: 'https://general-runtime.voiceflow.com',
+                assistant: {
+                    extensions: [DateExtension],
+                    stylesheet: "https://szileczkisoma.github.io/mindentmentteszt/style.css"
+                },
+                versionID: 'production',
+                voice: {
+                    url: "https://runtime-api.voiceflow.com"
+                }
+            });
+            
+            // Proactive message with 5-second delay and event trigger
+            setTimeout(function() {
+                window.voiceflow.chat.proactive
+                    .push({ 
+                        type: 'text', 
+                        payload: { 
+                            message: 'Van valami kérdése a fogkő-eltávolítással kapcsolatban?' 
+                        } 
+                    });
+                
+                // Trigger event when message appears
+                window.voiceflow.chat.interact({
+                    type: 'event',
+                    payload: {
+                        event: {
+                            name: 'Fogko_eltavolitas'
+                        }
                     }
                 });
-            };
-            v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
-            v.type = "text/javascript";
-            s.parentNode.insertBefore(v, s);
-        })(document, 'script');
-    </script>
+            }, 5000); // 5000 milliseconds = 5 seconds
+        };
+        v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
+        v.type = "text/javascript";
+        s.parentNode.insertBefore(v, s);
+    })(document, 'script');
+</script>
 </body>
 </html>
