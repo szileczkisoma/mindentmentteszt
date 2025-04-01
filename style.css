@@ -112,3 +112,14 @@
   justify-content: center !important;
   color: #000000 !important;
 }
+
+.vfrc-proactive .vfrc-button {
+  position: relative !important;
+}
+
+.vfrc-proactive .vfrc-button .vfrc-icon {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}
