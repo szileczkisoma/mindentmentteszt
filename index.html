@@ -84,9 +84,8 @@
                 // Dátumkorlátok beállítása (1 hónap múlt, 2 hónap jövő)
                 let currentDate = new Date();
                 let minDate = new Date();
-                minDate.setMonth(currentDate.getMonth() - 1);
                 let maxDate = new Date();
-                maxDate.setMonth(currentDate.getMonth() + 8);
+                maxDate.setMonth(currentDate.getMonth() + 6);
 
                 let minDateString = minDate.toISOString().slice(0, 10);
                 let maxDateString = maxDate.toISOString().slice(0, 10);
