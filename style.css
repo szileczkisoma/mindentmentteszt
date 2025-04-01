@@ -113,6 +113,10 @@
   color: #000000 !important;
 }
 
+.vfrc-proactive {
+  height: calc(100% + 40px) !important;
+}
+
 .vfrc-proactive .vfrc-button {
   position: relative !important;
 }
