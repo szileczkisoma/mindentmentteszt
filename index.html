@@ -236,7 +236,7 @@
                     .push({ 
                         type: 'text', 
                         payload: { 
-                            message: 'Van valami kérdése a fogkő-eltávolítással kapcsolatban?' 
+                            message: 'Segíthetek Önnek az implantátumokkal kapcsolatban?' 
                         } 
                     });
                 
@@ -245,11 +245,11 @@
                     type: 'event',
                     payload: {
                         event: {
-                            name: 'Fogko_eltavolitas'
+                            name: 'alphabio_multineo_implantatum'
                         }
                     }
                 });
-            }, 5000); // 5000 milliseconds = 5 seconds
+            }, 10000); // 5000 milliseconds = 5 seconds
         };
         v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
         v.type = "text/javascript";
