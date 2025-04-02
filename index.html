@@ -172,6 +172,7 @@
                         dateSelectBtn.textContent = selectedDate;
                         this.style.pointerEvents = 'none';
 
+                        // Ha még nincs submitButton, létrehozzuk
                         if (!submitButton) {
                             submitButton = document.createElement('button');
                             submitButton.className = 'submit-button';
@@ -179,14 +180,15 @@
                             formContainer.appendChild(submitButton);
 
                             submitButton.addEventListener('click', () => {
+                                const currentDate = dateInput.value; // Mindig az aktuális értéket olvassuk
                                 submitButton.textContent = 'Elküldve';
                                 submitButton.classList.add('submitted');
                                 submitButton.disabled = true;
 
-                                console.log('Sending to Voiceflow:', { date: selectedDate });
+                                console.log('Sending to Voiceflow:', { date: currentDate });
                                 window.voiceflow.chat.interact({
                                     type: 'complete',
-                                    payload: { date: selectedDate },
+                                    payload: { date: currentDate },
                                 });
                             });
                         }
