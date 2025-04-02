@@ -227,21 +227,17 @@
                 }
             });
 
-            // 10 másodperc késleltetés a csevegőbot megnyitására, majd 200 ms az eseményre
+            // 5 másodperc késleltetés az esemény triggerelésére
             setTimeout(function() {
-                window.voiceflow.chat.open();
-
-                setTimeout(function() {
-                    window.voiceflow.chat.interact({
-                        type: 'event',
-                        payload: {
-                            event: {
-                                name: 'idopontfoglalas'
-                            }
+                window.voiceflow.chat.interact({
+                    type: 'event',
+                    payload: {
+                        event: {
+                            name: 'idopontfoglalas'
                         }
-                    });
-                }, 1000); // 200 ms késleltetés az open után
-            }, 5000); // 10000 ms = 10 másodperc
+                    }
+                });
+            }, 5000); // 5000 ms = 5 másodperc
         };
         v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
         v.type = "text/javascript";
