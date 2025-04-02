@@ -81,7 +81,6 @@
                 const formContainer = document.createElement('div');
                 formContainer.style.position = 'relative';
 
-                // Dátumkorlátok beállítása (1 hónap múlt, 2 hónap jövő)
                 let currentDate = new Date();
                 let minDate = new Date();
                 let maxDate = new Date();
@@ -157,18 +156,16 @@
                 const dateInput = formContainer.querySelector('.date-input');
                 let submitButton = null;
 
-                // Gombra kattintáskor megnyílik a naptár
                 dateSelectBtn.addEventListener('click', () => {
                     dateInput.style.pointerEvents = 'auto';
                     try {
-                        dateInput.showPicker(); // Megnyitja a naptárt
+                        dateInput.showPicker();
                     } catch (e) {
                         console.log("A showPicker nem támogatott:", e);
-                        dateInput.focus(); // Fallback
+                        dateInput.focus();
                     }
                 });
 
-                // Dátum kiválasztása
                 dateInput.addEventListener('change', function () {
                     const selectedDate = this.value;
                     if (selectedDate) {
@@ -186,7 +183,7 @@
                                 submitButton.classList.add('submitted');
                                 submitButton.disabled = true;
 
-                                console.log('Sending to Voiceflow:', { date: selectedDate }); // Debug
+                                console.log('Sending to Voiceflow:', { date: selectedDate });
                                 window.voiceflow.chat.interact({
                                     type: 'complete',
                                     payload: { date: selectedDate },
@@ -196,18 +193,16 @@
                     }
                 });
 
-                // Lokális kattintáskezelés a konténeren belül
                 formContainer.addEventListener('click', (event) => {
                     if (!formContainer.contains(event.target)) {
                         dateInput.style.pointerEvents = 'none';
                     }
                 });
 
-                // Biztosítjuk, hogy az element stabil legyen
                 setTimeout(() => {
                     element.appendChild(formContainer);
                     console.log('DateExtension rendered successfully');
-                }, 100); // Kis késleltetés a stabilitás érdekében
+                }, 100);
             },
         };
     </script>
@@ -230,15 +225,10 @@
                 }
             });
 
-            // 10 másodperc késleltetés a csevegőbot megnyitására és további műveletekre
+            // 10 másodperc késleltetés a csevegőbot megnyitására, majd 1 másodperc az eseményre
             setTimeout(function() {
                 window.voiceflow.chat.open();
 
-                window.voiceflow.chat.interact({
-                    type: 'launch'
-                });
-
-                // 1,5 másodperc késleltetés a launch után az esemény kiváltására
                 setTimeout(function() {
                     window.voiceflow.chat.interact({
                         type: 'event',
@@ -248,8 +238,8 @@
                             }
                         }
                     });
-                }, 1500); // 1500 ms = 1,5 másodperc
-            }, 10000); // 10000 ms = 10 másodperc
+                }, 1000); // 1000 ms = 1 másodperc késleltetés az open után
+            }, 5000); // 10000 ms = 10 másodperc
         };
         v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
         v.type = "text/javascript";
