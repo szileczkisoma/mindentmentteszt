@@ -233,9 +233,13 @@
             // 10 másodperc késleltetés a csevegőbot megnyitására és esemény kiváltására
             setTimeout(function() {
                 window.voiceflow.chat.open();
-
+                
                 window.voiceflow.chat.interact({
-                    type: 'launch',
+                    type: 'launch'
+                });
+                
+                window.voiceflow.chat.interact({
+                    type: 'event',
                     payload: {
                         event: {
                             name: 'nemenjel_mosoly'
