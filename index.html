@@ -229,27 +229,20 @@
                     url: "https://runtime-api.voiceflow.com"
                 }
             });
-            
-            // Proactive message with 5-second delay and event trigger
+
+            // 10 másodperc késleltetés a csevegőbot megnyitására és esemény kiváltására
             setTimeout(function() {
-                window.voiceflow.chat.proactive
-                    .push({ 
-                        type: 'text', 
-                        payload: { 
-                            message: 'Segíthetek Önnek az implantátumokkal kapcsolatban?' 
-                        } 
-                    });
-                
-                // Trigger event when message appears
+                window.voiceflow.chat.open();
+
                 window.voiceflow.chat.interact({
                     type: 'event',
                     payload: {
                         event: {
-                            name: 'alphabio_multineo_implantatum'
+                            name: 'nemenjel_mosoly'
                         }
                     }
                 });
-            }, 10000); // 5000 milliseconds = 5 seconds
+            }, 10000); // 10000 ms = 10 másodperc
         };
         v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
         v.type = "text/javascript";
