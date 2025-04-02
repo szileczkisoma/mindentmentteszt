@@ -230,23 +230,26 @@
                 }
             });
 
-            // 10 másodperc késleltetés a csevegőbot megnyitására és esemény kiváltására
+            // 10 másodperc késleltetés a csevegőbot megnyitására és további műveletekre
             setTimeout(function() {
                 window.voiceflow.chat.open();
-                
+
                 window.voiceflow.chat.interact({
                     type: 'launch'
                 });
-                
-                window.voiceflow.chat.interact({
-                    type: 'event',
-                    payload: {
-                        event: {
-                            name: 'nemenjel_mosoly'
+
+                // 1,5 másodperc késleltetés a launch után az esemény kiváltására
+                setTimeout(function() {
+                    window.voiceflow.chat.interact({
+                        type: 'event',
+                        payload: {
+                            event: {
+                                name: 'nemenjel_mosoly'
+                            }
                         }
-                    }
-                });
-            }, 5000); // 10000 ms = 10 másodperc
+                    });
+                }, 1500); // 1500 ms = 1,5 másodperc
+            }, 10000); // 10000 ms = 10 másodperc
         };
         v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
         v.type = "text/javascript";
