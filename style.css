@@ -129,6 +129,11 @@
   transform: translate(-50%, -50%) !important;
 }
 
-.vfrc-avatar.g931q10.g931q12 img {
-  width: 500px; /* Nagyobb kép */
-  height: 500px /* Arányos magasság */
+.g931q10 {
+  background-color: #ebebeb;
+  box-shadow: 0;
+}
+
+.g931q12 {
+  box-shadow: none;
+}
