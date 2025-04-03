@@ -48,6 +48,7 @@
   border: 1px solid rgb(72, 174, 225);
   display: block;
   overflow: hidden;
+  padding: 1px 1px 0 1px;
 }
 
 .vfrc-assistant-info .vfrc-avatar {
