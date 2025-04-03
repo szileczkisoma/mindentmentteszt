@@ -52,9 +52,9 @@
 }
 
 .vfrc-assistant-info .vfrc-avatar {
-  height: 160px;
-  width: 260px;
-  border: 1px solid rgb(72, 174, 225);
+  height: 200px;
+  width: 300px;
+  box-shadow: 0;
   display: block;
   overflow: hidden;
 }
