@@ -48,7 +48,7 @@
   border: 1px solid rgb(72, 174, 225);
   display: block;
   overflow: hidden;
-  padding: 1px 1px 0 1px;
+  padding: 2px 2px 0 2px;
 }
 
 .vfrc-assistant-info .vfrc-avatar {
@@ -131,4 +131,4 @@
 
 .vfrc-avatar.g931q10.g931q12 img {
   width: 500px; /* Nagyobb kép */
-  height: 500 /* Arányos magasság */
+  height: 500px /* Arányos magasság */
