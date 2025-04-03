@@ -2,6 +2,9 @@
   border: 3px solid rgb(72, 174, 225) !important;
   border-radius: 10px !important;
   background-color: rgb(235, 235, 235);
+  height: 90%;
+  position: absolute;
+  bottom: -10px;
 }
 
 .vfrc-header {
@@ -57,7 +60,7 @@
   width: 300px;
   box-shadow: 0;
   display: block;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .vfrc-assistant-info--description {
@@ -138,3 +141,4 @@
 .g931q12 {
   box-shadow: none;
 }
+
