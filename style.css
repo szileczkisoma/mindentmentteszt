@@ -19,6 +19,10 @@
     font-size: 14px;
     min-width: unset;
   }
+  
+  .vfrc-proactive {
+    height: calc(100% + 170px) !important; /* Az alapmagassághoz képest +170px telefonon */
+  }
 }
 
 .vfrc-header {
