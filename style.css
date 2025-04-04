@@ -2,9 +2,10 @@
   border: 3px solid rgb(72, 174, 225) !important;
   border-radius: 10px !important;
   background-color: rgb(235, 235, 235);
-  height: 90%;
+  height: 80%;
   position: absolute;
   bottom: -10px;
+  right: 10px
 }
 
 .vfrc-header {
