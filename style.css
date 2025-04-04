@@ -4,18 +4,20 @@
   background-color: rgb(235, 235, 235);
   height: 75vh;
   width: 20vw;
+  min-width: 400px
   position: absolute;
   bottom: -10px;
-  right: 10px
+  right: 10px;
 }
 
 @media (max-width: 768px) {
   .vfrc-chat {
-    width: 90vw;
+    width: 98vw;
     height: 70vh;
     bottom: 10px;
     right: 5px;
     font-size: 14px;
+    min-width: unset;
   }
 }
 
