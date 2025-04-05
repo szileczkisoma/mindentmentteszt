@@ -217,10 +217,12 @@
             window.voiceflow.chat.load({
                 verify: { projectID: '67eb9441e65fd8cb380c11fc' },
                 url: 'https://general-runtime.voiceflow.com',
+                config: {
+                    closeButton: true
+                },
                 assistant: {
                     extensions: [DateExtension],
-                    stylesheet: "https://szileczkisoma.github.io/mindentmentteszt/style.css",
-                    showCloseButton: true,
+                    stylesheet: "https://szileczkisoma.github.io/mindentmentteszt/style.css"
                 },
                 versionID: 'production',
                 voice: {
