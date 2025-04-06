@@ -241,6 +241,9 @@
                 versionID: 'production',
                 voice: {
                     url: "https://runtime-api.voiceflow.com"
+                },
+                render: {
+                    target: document.getElementById('voiceflow-chat') // Explicit konténer megadása
                 }
             }).then(() => {
                 console.log('Voiceflow chat inicializálva');
