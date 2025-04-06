@@ -187,7 +187,6 @@
                         dateSelectBtn.textContent = selectedDate;
                         this.style.pointerEvents = 'none';
 
-                        // Ha még nincs submitButton, létrehozzuk
                         if (!submitButton) {
                             submitButton = document.createElement('button');
                             submitButton.className = 'submit-button';
@@ -195,7 +194,7 @@
                             formContainer.appendChild(submitButton);
 
                             submitButton.addEventListener('click', () => {
-                                const currentDate = dateInput.value; // Mindig az aktuális értéket olvassuk
+                                const currentDate = dateInput.value;
                                 submitButton.textContent = 'Elküldve';
                                 submitButton.classList.add('submitted');
                                 submitButton.disabled = true;
@@ -224,6 +223,7 @@
         };
     </script>
 
+    <!-- Voiceflow script -->
     <script type="text/javascript">
     (function(d, t) {
         var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
@@ -253,20 +253,52 @@
                     });
                 }, 5000);
 
-                // Overlay kattintás kezelése
+                // Overlay és chat kezelése
                 const openButton = document.querySelector('.nyitas-gomb');
-                if (openButton) {
+                const chatContainer = document.getElementById('voiceflow-chat');
+
+                if (openButton && chatContainer) {
+                    // Kattintás kezelése
                     openButton.addEventListener('click', function() {
                         console.log('Nyitás gomb kattintás történt');
                         if (window.voiceflow && window.voiceflow.chat) {
                             window.voiceflow.chat.open();
                             console.log('Chat megnyitási kísérlet');
+                            openButton.style.display = 'none'; // Overlay kikapcsolása
                         } else {
                             console.error('Voiceflow chat nem érhető el');
                         }
                     });
+
+                    // Chat állapot figyelése
+                    const observer = new MutationObserver(function(mutations) {
+                        const computedStyle = getComputedStyle(chatContainer);
+                        const isChatVisible = computedStyle.display !== 'none' && 
+                                            computedStyle.visibility !== 'hidden' && 
+                                            computedStyle.opacity !== '0' &&
+                                            chatContainer.offsetParent !== null;
+
+                        if (isChatVisible) {
+                            openButton.style.display = 'none'; // Chat látható, overlay kikapcsolva
+                        } else {
+                            openButton.style.display = 'block'; // Chat rejtett, overlay vissza
+                        }
+                    });
+
+                    // Figyeljük a #voiceflow-chat attribútumait és gyerekelemeit
+                    observer.observe(chatContainer, { 
+                        attributes: true, 
+                        childList: true, 
+                        subtree: true 
+                    });
+
+                    // Kezdeti állapot ellenőrzése
+                    const initialStyle = getComputedStyle(chatContainer);
+                    if (initialStyle.display !== 'none' && initialStyle.visibility !== 'hidden') {
+                        openButton.style.display = 'none';
+                    }
                 } else {
-                    console.error('Nyitás gomb nem található a DOM-ban');
+                    console.error('Nyitás gomb vagy chat konténer nem található');
                 }
             }).catch((err) => {
                 console.error('Hiba a Voiceflow betöltésekor:', err);
