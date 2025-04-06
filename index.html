@@ -280,13 +280,24 @@
                                                 computedStyle.opacity !== '0' &&
                                                 chatWindow.offsetParent !== null;
 
+                            console.log('Chat állapot ellenőrzése:', {
+                                display: computedStyle.display,
+                                visibility: computedStyle.visibility,
+                                opacity: computedStyle.opacity,
+                                offsetParent: chatWindow.offsetParent !== null,
+                                isChatVisible: isChatVisible
+                            });
+
                             if (isChatVisible) {
                                 openButton.style.display = 'none'; // Chat látható, overlay kikapcsolva
+                                console.log('Chat látható, overlay kikapcsolva');
                             } else {
                                 openButton.style.display = 'block'; // Chat rejtett, overlay vissza
+                                console.log('Chat rejtett, overlay visszakapcsolva');
                             }
                         } else {
-                            openButton.style.display = 'block'; // Ha a chat ablak még nincs, overlay látható
+                            openButton.style.display = 'block'; // Ha a chat ablak nincs, overlay látható
+                            console.log('Nincs chat ablak, overlay látható');
                         }
                     });
 
@@ -297,7 +308,7 @@
                         subtree: true 
                     });
 
-                    // Kezdeti állapot: csak a .vfrc-chat alapján döntünk
+                    // Kezdeti állapot
                     const chatWindow = chatContainer.querySelector('.vfrc-chat');
                     if (chatWindow) {
                         const initialStyle = getComputedStyle(chatWindow);
@@ -305,11 +316,14 @@
                                               initialStyle.visibility !== 'hidden';
                         if (isInitiallyOpen) {
                             openButton.style.display = 'none';
+                            console.log('Kezdeti állapot: Chat látható, overlay kikapcsolva');
                         } else {
                             openButton.style.display = 'block';
+                            console.log('Kezdeti állapot: Chat rejtett, overlay látható');
                         }
                     } else {
-                        openButton.style.display = 'block'; // Ha nincs még chat ablak, overlay látható
+                        openButton.style.display = 'block';
+                        console.log('Kezdeti állapot: Nincs chat ablak, overlay látható');
                     }
                 } else {
                     console.error('Nyitás gomb vagy chat konténer nem található');
