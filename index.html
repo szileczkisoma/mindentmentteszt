@@ -62,11 +62,8 @@
         <p>Itt megismerheted implantátumainkat</p>
     </div>
 
-    <!-- Nyitás gomb overlay -->
+    <!-- Nyitás gomb -->
     <div class="nyitas-gomb"></div>
-
-    <!-- Voiceflow konténer -->
-    <div id="voiceflow-chat"></div>
 
     <script>
         function showPage(pageId) {
@@ -241,77 +238,7 @@
                 versionID: 'production',
                 voice: {
                     url: "https://runtime-api.voiceflow.com"
-                },
-                render: {
-                    target: document.getElementById('voiceflow-chat') // Explicit konténer
                 }
-            }).then(() => {
-                console.log('Voiceflow chat inicializálva');
-
-                // Proaktív üzenet küldése
-                setTimeout(function() {
-                    console.log('Proaktív üzenet küldése...');
-                    window.voiceflow.chat.proactive.clear();
-                    window.voiceflow.chat.proactive.push({ 
-                        type: 'text', 
-                        payload: { message: 'Kell fogász?' }
-                    });
-                }, 5000);
-
-                // Overlay és launcher kezelése
-                const openButton = document.querySelector('.nyitas-gomb');
-
-                if (openButton) {
-                    // Nyitás gomb kattintása
-                    openButton.addEventListener('click', function() {
-                        console.log('Nyitás gomb kattintás történt');
-                        if (window.voiceflow && window.voiceflow.chat) {
-                            window.voiceflow.chat.open();
-                            console.log('Chat megnyitási kísérlet');
-                            openButton.style.display = 'none'; // Overlay kikapcsolása
-                        } else {
-                            console.error('Voiceflow chat nem érhető el');
-                        }
-                    });
-
-                    // Shadow DOM-ban lévő launcher gomb keresése
-                    const chatContainer = document.getElementById('voiceflow-chat');
-                    function findLauncherButton(attempts = 0) {
-                        if (attempts > 20) { // Maximum 10 másodperc várakozás
-                            console.error('Launcher gomb nem található 10 másodperc után');
-                            return;
-                        }
-                        if (chatContainer.shadowRoot) {
-                            const launcherButton = chatContainer.shadowRoot.querySelector('button[title="Segíthetek?"]');
-                            if (launcherButton) {
-                                launcherButton.addEventListener('click', function() {
-                                    console.log('Launcher gomb kattintás történt shadow DOM-ban');
-                                    if (openButton.style.display === 'block' || openButton.style.display === '') {
-                                        openButton.style.display = 'none'; // Overlay kikapcsolása
-                                        console.log('Overlay kikapcsolva');
-                                    } else {
-                                        openButton.style.display = 'block'; // Overlay bekapcsolása
-                                        console.log('Overlay bekapcsolva');
-                                    }
-                                });
-                                console.log('Launcher megtalálva shadow DOM-ban');
-                            } else {
-                                console.log('Launcher még nem található shadow DOM-ban, várakozás...');
-                                setTimeout(() => findLauncherButton(attempts + 1), 500);
-                            }
-                        } else {
-                            console.log('shadowRoot nem található még, várakozás...');
-                            setTimeout(() => findLauncherButton(attempts + 1), 500);
-                        }
-                    }
-
-                    findLauncherButton(); // Elindítjuk a keresést
-                    openButton.style.display = 'block'; // Alapból látható
-                } else {
-                    console.error('Nyitás gomb nem található');
-                }
-            }).catch((err) => {
-                console.error('Hiba a Voiceflow betöltésekor:', err);
             });
         };
         v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
