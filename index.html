@@ -237,13 +237,9 @@
                 }
             }).then(() => {
                 console.log('Voiceflow chat inicializálva');
-            }).catch((err) => {
-                console.error('Hiba a Voiceflow betöltésekor:', err);
-            });
 
-            // 5 másodperc késleltetés a proaktív üzenethez
-            setTimeout(function() {
-                if (window.voiceflow && window.voiceflow.chat) {
+                // Proaktív üzenet küldése és overlay hozzáadása a widget betöltése után
+                setTimeout(function() {
                     console.log('Proaktív üzenet küldése...');
                     window.voiceflow.chat.proactive.clear();
                     window.voiceflow.chat.proactive.push({ 
@@ -265,12 +261,8 @@
                             overlay.className = 'proactive-overlay';
                             overlay.addEventListener('click', function() {
                                 console.log('Overlay kattintás történt');
-                                if (window.voiceflow && window.voiceflow.chat) {
-                                    window.voiceflow.chat.open();
-                                    console.log('Chat megnyitási kísérlet');
-                                } else {
-                                    console.error('Voiceflow chat nem érhető el');
-                                }
+                                window.voiceflow.chat.open();
+                                console.log('Chat megnyitási kísérlet');
                             });
 
                             // Pozicionáljuk az overlay-t
@@ -286,10 +278,10 @@
                             }
                         }
                     }, 500);
-                } else {
-                    console.error('Voiceflow nem töltött be a proaktív üzenet előtt');
-                }
-            }, 5000);
+                }, 5000); // 5 másodperc késleltetés az üzenet küldésére
+            }).catch((err) => {
+                console.error('Hiba a Voiceflow betöltésekor:', err);
+            });
         };
         v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
         v.type = "text/javascript";
