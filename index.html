@@ -251,12 +251,12 @@
                         payload: { message: 'Kell fogász?' }
                     });
 
-                    // Figyeljük a proaktív üzenetet hosszabb ideig
+                    // Figyeljük a proaktív üzenetet az új szelektorral
                     let attempts = 0;
-                    const maxAttempts = 30; // 15 másodperc (30 * 500ms)
+                    const maxAttempts = 30; // 15 másodperc
                     const checkProactive = setInterval(function() {
                         attempts++;
-                        const proactiveContainer = document.querySelector('.vfrc-proactive');
+                        const proactiveContainer = document.querySelector('._6r9xee4');
                         if (proactiveContainer) {
                             console.log('Proaktív konténer megtalálva:', proactiveContainer);
 
