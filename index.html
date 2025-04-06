@@ -207,9 +207,6 @@
                 }, 100);
             },
         };
-    </script>
-
-    <!-- Voiceflow Web Chat betöltése -->
     <script type="text/javascript">
     (function(d, t) {
         var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
@@ -227,15 +224,12 @@
                 }
             });
 
-            // 5 másodperc késleltetés az esemény triggerelésére
+            // 5 másodperc késleltetés a proaktív üzenethez
             setTimeout(function() {
-                window.voiceflow.chat.interact({
-                    type: 'event',
-                    payload: {
-                        event: {
-                            name: 'alphabio_multineo_implantatum'
-                        }
-                    }
+                window.voiceflow.chat.proactive.clear();
+                window.voiceflow.chat.proactive.push({ 
+                    type: 'text', 
+                    payload: { message: 'Segíthetek valamiben?' }
                 });
             }, 5000); // 5000 ms = 5 másodperc
         };
