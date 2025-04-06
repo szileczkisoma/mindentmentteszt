@@ -32,8 +32,8 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            width: 50px; /* Méret tetszés szerint állítható */
-            height: 50px;
+            width: 100px; /* Nagyobb méret */
+            height: 100px;
             background: transparent;
             cursor: pointer;
             z-index: 1000;
@@ -242,6 +242,16 @@
                 }
             }).then(() => {
                 console.log('Voiceflow chat inicializálva');
+
+                // Proaktív üzenet küldése
+                setTimeout(function() {
+                    console.log('Proaktív üzenet küldése...');
+                    window.voiceflow.chat.proactive.clear();
+                    window.voiceflow.chat.proactive.push({ 
+                        type: 'text', 
+                        payload: { message: 'Kell fogász?' }
+                    });
+                }, 5000);
 
                 // Overlay kattintás kezelése
                 const openButton = document.querySelector('.nyitas-gomb');
