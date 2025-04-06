@@ -268,20 +268,20 @@
                         }
                     });
 
-                    // Launcher gomb gap figyelése
+                    // Launcher gomb osztályainak figyelése
                     const observer = new MutationObserver(function(mutations) {
-                        const launcherButton = document.querySelector('.vfrc-launcher._15s29m92');
+                        const launcherButton = document.querySelector('.vfrc-launcher');
                         if (launcherButton) {
-                            const computedStyle = getComputedStyle(launcherButton);
-                            const gapValue = computedStyle.gap || computedStyle.columnGap; // Gap vagy column-gap
-                            console.log('Launcher gap értéke:', gapValue);
+                            const isChatOpen = launcherButton.classList.contains('_15s29m93');
+                            console.log('Launcher osztályok:', launcherButton.classList.toString());
+                            console.log('Chat nyitva?', isChatOpen);
 
-                            if (gapValue === '0px' || gapValue === '0') {
+                            if (isChatOpen) {
                                 openButton.style.display = 'none'; // Chat nyitva, overlay kikapcsol
-                                console.log('Gap: 0px, overlay kikapcsolva');
-                            } else if (gapValue === '6px') {
+                                console.log('Chat nyitva, overlay kikapcsolva');
+                            } else {
                                 openButton.style.display = 'block'; // Chat zárva, overlay bekapcsol
-                                console.log('Gap: 6px, overlay bekapcsolva');
+                                console.log('Chat zárva, overlay bekapcsolva');
                             }
                         } else {
                             console.log('Launcher gomb nem található');
@@ -297,16 +297,15 @@
 
                     // Kezdeti állapot
                     const checkLauncher = setInterval(() => {
-                        const launcherButton = document.querySelector('.vfrc-launcher._15s29m92');
+                        const launcherButton = document.querySelector('.vfrc-launcher');
                         if (launcherButton) {
-                            const computedStyle = getComputedStyle(launcherButton);
-                            const initialGap = computedStyle.gap || computedStyle.columnGap;
-                            if (initialGap === '6px') {
-                                openButton.style.display = 'block';
-                                console.log('Kezdeti állapot: Gap 6px, overlay bekapcsolva');
-                            } else if (initialGap === '0px' || initialGap === '0') {
+                            const isInitiallyOpen = launcherButton.classList.contains('_15s29m93');
+                            if (isInitiallyOpen) {
                                 openButton.style.display = 'none';
-                                console.log('Kezdeti állapot: Gap 0px, overlay kikapcsolva');
+                                console.log('Kezdeti állapot: Chat nyitva, overlay kikapcsolva');
+                            } else {
+                                openButton.style.display = 'block';
+                                console.log('Kezdeti állapot: Chat zárva, overlay bekapcsolva');
                             }
                             clearInterval(checkLauncher); // Megállítjuk az ellenőrzést
                         }
