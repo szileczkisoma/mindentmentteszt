@@ -231,23 +231,27 @@
                 window.voiceflow.chat.proactive.clear();
                 window.voiceflow.chat.proactive.push({ 
                     type: 'text', 
-                    payload: { message: 'Kell fogász?' } // Üzenet frissítve
+                    payload: { message: 'Kell fogász?' }
                 });
 
                 // Figyeljük a ._6r9xee3.o231sh1 osztályú elemet
                 const checkProactive = setInterval(function() {
                     const proactiveBubble = document.querySelector('._6r9xee3.o231sh1');
                     if (proactiveBubble) {
-                        proactiveBubble.style.cursor = 'pointer'; // Jelzi, hogy kattintható
+                        console.log('Proaktív üzenet megtalálva:', proactiveBubble);
+                        proactiveBubble.style.cursor = 'pointer !important'; // Erősebb kurzor beállítás
+                        proactiveBubble.style.userSelect = 'none'; // Szöveg kijelölésének tiltása
                         proactiveBubble.addEventListener('click', function() {
                             if (window.voiceflow && window.voiceflow.chat) {
+                                console.log('Kattintás történt, chat megnyitása...');
                                 window.voiceflow.chat.open();
-                                console.log('Chat megnyitva');
                             } else {
                                 console.error('Voiceflow chat nem érhető el');
                             }
                         });
                         clearInterval(checkProactive); // Megállítjuk az ellenőrzést
+                    } else {
+                        console.log('Proaktív üzenet még nem található');
                     }
                 }, 500); // 500ms-enként ellenőrzi
             }, 5000); // 5000 ms = 5 másodperc
