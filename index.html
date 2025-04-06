@@ -243,7 +243,7 @@
                     url: "https://runtime-api.voiceflow.com"
                 },
                 render: {
-                    target: document.getElementById('voiceflow-chat') // Explicit konténer megadása
+                    target: document.getElementById('voiceflow-chat') // Explicit konténer
                 }
             }).then(() => {
                 console.log('Voiceflow chat inicializálva');
@@ -275,9 +275,13 @@
                     });
 
                     // Shadow DOM-ban lévő launcher gomb keresése
-                    function findLauncherButton() {
-                        const chatContainer = document.getElementById('voiceflow-chat');
-                        if (chatContainer && chatContainer.shadowRoot) {
+                    const chatContainer = document.getElementById('voiceflow-chat');
+                    function findLauncherButton(attempts = 0) {
+                        if (attempts > 20) { // Maximum 10 másodperc várakozás
+                            console.error('Launcher gomb nem található 10 másodperc után');
+                            return;
+                        }
+                        if (chatContainer.shadowRoot) {
                             const launcherButton = chatContainer.shadowRoot.querySelector('button[title="Segíthetek?"]');
                             if (launcherButton) {
                                 launcherButton.addEventListener('click', function() {
@@ -293,11 +297,11 @@
                                 console.log('Launcher megtalálva shadow DOM-ban');
                             } else {
                                 console.log('Launcher még nem található shadow DOM-ban, várakozás...');
-                                setTimeout(findLauncherButton, 500);
+                                setTimeout(() => findLauncherButton(attempts + 1), 500);
                             }
                         } else {
-                            console.log('voiceflow-chat vagy shadowRoot nem található, várakozás...');
-                            setTimeout(findLauncherButton, 500);
+                            console.log('shadowRoot nem található még, várakozás...');
+                            setTimeout(() => findLauncherButton(attempts + 1), 500);
                         }
                     }
 
