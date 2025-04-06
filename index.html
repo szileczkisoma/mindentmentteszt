@@ -231,12 +231,12 @@
                 window.voiceflow.chat.proactive.clear();
                 window.voiceflow.chat.proactive.push({ 
                     type: 'text', 
-                    payload: { message: 'Kő kóla genyó?' }
+                    payload: { message: 'Kell fogász?' } // Üzenet frissítve
                 });
 
-                // Figyeljük a .vfrc-proactive osztályú elemet
+                // Figyeljük a ._6r9xee3.o231sh1 osztályú elemet
                 const checkProactive = setInterval(function() {
-                    const proactiveBubble = document.querySelector('.vfrc-proactive');
+                    const proactiveBubble = document.querySelector('._6r9xee3.o231sh1');
                     if (proactiveBubble) {
                         proactiveBubble.style.cursor = 'pointer'; // Jelzi, hogy kattintható
                         proactiveBubble.addEventListener('click', function() {
