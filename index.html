@@ -231,14 +231,24 @@
                 window.voiceflow.chat.proactive.clear();
                 window.voiceflow.chat.proactive.push({ 
                     type: 'text', 
-                    payload: { 
-                        message: 'Kell fogász?'
-                    },
-                    verdict: function() {
-                        // Kattintásra megnyitja a chatet
-                        window.voiceflow.chat.open();
-                    }
+                    payload: { message: 'Segíthetek valamiben?' }
                 });
+
+                // Figyeljük a proaktív üzenet megjelenését és adjunk hozzá kattintás eseményt
+                const checkProactive = setInterval(function() {
+                    const proactiveBubble = document.querySelector('div[data-type="proactive"]'); // Voiceflow proaktív üzenet szelektor
+                    if (proactiveBubble) {
+                        proactiveBubble.style.cursor = 'pointer'; // Jelzi, hogy kattintható
+                        proactiveBubble.addEventListener('click', function() {
+                            if (window.voiceflow && window.voiceflow.chat) {
+                                window.voiceflow.chat.open();
+                            } else {
+                                console.error('Voiceflow chat nem érhető el');
+                            }
+                        });
+                        clearInterval(checkProactive); // Megállítjuk az ellenőrzést, ha megtaláltuk
+                    }
+                }, 500); // 500ms-enként ellenőrzi
             }, 5000); // 5000 ms = 5 másodperc
         };
         v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
