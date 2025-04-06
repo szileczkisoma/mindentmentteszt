@@ -231,7 +231,13 @@
                 window.voiceflow.chat.proactive.clear();
                 window.voiceflow.chat.proactive.push({ 
                     type: 'text', 
-                    payload: { message: 'Segíthetek valamiben?' }
+                    payload: { 
+                        message: 'Kell fogász?'
+                    },
+                    verdict: function() {
+                        // Kattintásra megnyitja a chatet
+                        window.voiceflow.chat.open();
+                    }
                 });
             }, 5000); // 5000 ms = 5 másodperc
         };
