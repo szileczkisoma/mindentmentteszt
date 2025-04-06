@@ -255,8 +255,6 @@
 
                 // Overlay és launcher kezelése
                 const openButton = document.querySelector('.nyitas-gomb');
-                let launcherButton = document.querySelector('.vfrc-launcher');
-                let lastWidth = null; // Az utolsó ismert szélesség tárolása
 
                 if (openButton) {
                     // Kattintás kezelése az overlay-re
@@ -265,55 +263,54 @@
                         if (window.voiceflow && window.voiceflow.chat) {
                             window.voiceflow.chat.open();
                             console.log('Chat megnyitási kísérlet');
-                            // Az overlay kikapcsolása itt nem szükséges, a ResizeObserver kezeli
                         } else {
                             console.error('Voiceflow chat nem érhető el');
                         }
                     });
 
-                    // Launcher gomb méretének figyelése
-                    const observer = new ResizeObserver((entries) => {
-                        launcherButton = document.querySelector('.vfrc-launcher'); // Frissítjük, ha változik
+                    // Launcher gomb gap figyelése
+                    const observer = new MutationObserver(function(mutations) {
+                        const launcherButton = document.querySelector('.vfrc-launcher._15s29m92');
                         if (launcherButton) {
-                            const currentWidth = launcherButton.getBoundingClientRect().width;
-                            console.log('Launcher szélesség:', currentWidth, 'Utolsó szélesség:', lastWidth);
+                            const computedStyle = getComputedStyle(launcherButton);
+                            const gapValue = computedStyle.gap || computedStyle.columnGap; // Gap vagy column-gap
+                            console.log('Launcher gap értéke:', gapValue);
 
-                            // Ha ez az első mérés, inicializáljuk az utolsó szélességet
-                            if (lastWidth === null) {
-                                lastWidth = currentWidth;
-                                openButton.style.display = 'block'; // Alapból bekapcsolva
-                                console.log('Kezdeti állapot: Overlay bekapcsolva');
-                                return;
-                            }
-
-                            // Ha a szélesség megváltozott
-                            if (currentWidth !== lastWidth) {
-                                if (openButton.style.display === 'block' || openButton.style.display === '') {
-                                    openButton.style.display = 'none';
-                                    console.log('Szélesség változott, overlay kikapcsolva');
-                                } else {
-                                    openButton.style.display = 'block';
-                                    console.log('Szélesség változott, overlay bekapcsolva');
-                                }
-                                lastWidth = currentWidth; // Frissítjük az utolsó szélességet
+                            if (gapValue === '0px' || gapValue === '0') {
+                                openButton.style.display = 'none'; // Chat nyitva, overlay kikapcsol
+                                console.log('Gap: 0px, overlay kikapcsolva');
+                            } else if (gapValue === '6px') {
+                                openButton.style.display = 'block'; // Chat zárva, overlay bekapcsol
+                                console.log('Gap: 6px, overlay bekapcsolva');
                             }
                         } else {
                             console.log('Launcher gomb nem található');
                         }
                     });
 
-                    // Várunk, amíg a launcher betölt
-                    const checkLauncher = setInterval(() => {
-                        launcherButton = document.querySelector('.vfrc-launcher');
-                        if (launcherButton) {
-                            observer.observe(launcherButton);
-                            clearInterval(checkLauncher);
-                            console.log('Launcher megtalálva, figyelés megkezdve');
-                        }
-                    }, 100);
+                    // Figyeljük a body-t, mert a launcher dinamikusan töltődik be
+                    observer.observe(document.body, { 
+                        attributes: true, 
+                        childList: true, 
+                        subtree: true 
+                    });
 
                     // Kezdeti állapot
-                    openButton.style.display = 'block'; // Alapból bekapcsolva
+                    const checkLauncher = setInterval(() => {
+                        const launcherButton = document.querySelector('.vfrc-launcher._15s29m92');
+                        if (launcherButton) {
+                            const computedStyle = getComputedStyle(launcherButton);
+                            const initialGap = computedStyle.gap || computedStyle.columnGap;
+                            if (initialGap === '6px') {
+                                openButton.style.display = 'block';
+                                console.log('Kezdeti állapot: Gap 6px, overlay bekapcsolva');
+                            } else if (initialGap === '0px' || initialGap === '0') {
+                                openButton.style.display = 'none';
+                                console.log('Kezdeti állapot: Gap 0px, overlay kikapcsolva');
+                            }
+                            clearInterval(checkLauncher); // Megállítjuk az ellenőrzést
+                        }
+                    }, 100);
                 } else {
                     console.error('Nyitás gomb nem található');
                 }
