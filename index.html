@@ -27,6 +27,17 @@
         .page.active {
             display: block;
         }
+        /* Overlay stílusa */
+        .proactive-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            cursor: pointer;
+            z-index: 1000; /* Biztosítja, hogy az overlay legyen felül */
+        }
     </style>
 </head>
 <body>
@@ -243,23 +254,30 @@
 
                     // Figyeljük a proaktív üzenetet
                     const checkProactive = setInterval(function() {
-                        const proactiveBubble = document.querySelector('._6r9xee3.o231sh1') || document.querySelector('.vfrc-proactive');
-                        if (proactiveBubble) {
-                            console.log('Proaktív üzenet megtalálva:', proactiveBubble);
-                            proactiveBubble.style.cursor = 'pointer !important';
-                            proactiveBubble.style.userSelect = 'none !important';
-                            proactiveBubble.addEventListener('click', function() {
-                                console.log('Kattintás történt az üzeneten');
+                        const proactiveContainer = document.querySelector('.vfrc-proactive');
+                        if (proactiveContainer) {
+                            console.log('Proaktív konténer megtalálva:', proactiveContainer);
+
+                            // Létrehozzuk az overlay-t
+                            const overlay = document.createElement('div');
+                            overlay.className = 'proactive-overlay';
+                            overlay.addEventListener('click', function() {
+                                console.log('Overlay kattintás történt');
                                 if (window.voiceflow && window.voiceflow.chat) {
                                     window.voiceflow.chat.open();
                                     console.log('Chat megnyitási kísérlet');
                                 } else {
-                                    console.error('Voiceflow chat nem érhető el kattintáskor');
+                                    console.error('Voiceflow chat nem érhető el');
                                 }
                             });
+
+                            // Pozicionáljuk az overlay-t a konténerhez képest
+                            proactiveContainer.style.position = 'relative'; // Biztosítjuk, hogy a konténer pozicionált legyen
+                            proactiveContainer.appendChild(overlay);
+
                             clearInterval(checkProactive);
                         } else {
-                            console.log('Proaktív üzenet még nem található');
+                            console.log('Proaktív konténer még nem található');
                         }
                     }, 500);
                 } else {
