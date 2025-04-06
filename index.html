@@ -65,6 +65,9 @@
     <!-- Nyitás gomb overlay -->
     <div class="nyitas-gomb"></div>
 
+    <!-- Voiceflow konténer -->
+    <div id="voiceflow-chat"></div>
+
     <script>
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
@@ -270,9 +273,9 @@
 
                     // Shadow DOM-ban lévő launcher gomb keresése
                     function findLauncherButton() {
-                        const widget = document.querySelector('.vfrc-widget');
-                        if (widget && widget.shadowRoot) {
-                            const launcherButton = widget.shadowRoot.querySelector('button[title="Segíthetek?"]');
+                        const chatContainer = document.getElementById('voiceflow-chat');
+                        if (chatContainer && chatContainer.shadowRoot) {
+                            const launcherButton = chatContainer.shadowRoot.querySelector('button[title="Segíthetek?"]');
                             if (launcherButton) {
                                 launcherButton.addEventListener('click', function() {
                                     console.log('Launcher gomb kattintás történt shadow DOM-ban');
@@ -290,7 +293,7 @@
                                 setTimeout(findLauncherButton, 500);
                             }
                         } else {
-                            console.log('Widget vagy shadowRoot nem található, várakozás...');
+                            console.log('voiceflow-chat vagy shadowRoot nem található, várakozás...');
                             setTimeout(findLauncherButton, 500);
                         }
                     }
