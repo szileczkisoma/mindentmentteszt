@@ -8,7 +8,7 @@
   position: absolute;
   bottom: -10px;
   right: 10px;
-  z-index: 100001;
+  z-index: 999999;
 }
 
 @media (max-width: 768px) {
@@ -181,17 +181,17 @@
 }
 
 .vfrc-launcher {
-  z-index: 100001;
+  z-index: 999999;
 }
 
 ._15s29m98 {
-  z-index: 100001;
+  z-index: 999999;
 }
 
 ._15s29m94 {
-  z-index: 100001;
+  z-index: 999999;
 }
   
 ._15s29m92 {
-  z-index: 100001;
+  z-index: 999999;
 }
