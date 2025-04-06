@@ -8,7 +8,6 @@
   position: absolute;
   bottom: -10px;
   right: 10px;
-  z-index: 999999;
 }
 
 @media (max-width: 768px) {
@@ -178,20 +177,4 @@
 .jyiuei6 {
   position: absolute;
   right: 2px;
-}
-
-.vfrc-launcher {
-  z-index: 999999;
-}
-
-._15s29m98 {
-  z-index: 999999;
-}
-
-._15s29m94 {
-  z-index: 999999;
-}
-  
-._15s29m92 {
-  z-index: 999999;
 }
