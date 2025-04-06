@@ -253,7 +253,7 @@
                     });
                 }, 5000);
 
-                // Overlay és launcher kezelése
+                // Overlay és widget kezelése
                 const openButton = document.querySelector('.nyitas-gomb');
 
                 if (openButton) {
@@ -269,28 +269,42 @@
                         }
                     });
 
-                    // Launcher gomb ellenőrzése időzítővel
-                    setInterval(() => {
-                        const launcherButton = document.querySelector('.vfrc-launcher');
-                        if (launcherButton) {
-                            const isChatOpen = launcherButton.classList.contains('_15s29m93');
-                            console.log('Launcher osztályok:', launcherButton.classList.toString());
-                            console.log('Chat nyitva?', isChatOpen);
+                    // Widget változásának figyelése
+                    const observer = new MutationObserver(function(mutations) {
+                        mutations.forEach(mutation => {
+                            console.log('Widget változás észlelve:', mutation);
+                            const widget = document.querySelector('.vfrc-widget');
+                            if (widget) {
+                                const chatWindow = widget.querySelector('.vfrc-chat');
+                                const isChatVisible = chatWindow && getComputedStyle(chatWindow).display !== 'none';
+                                console.log('Chat látható?', isChatVisible);
 
-                            if (isChatOpen) {
-                                openButton.style.display = 'none'; // Chat nyitva, overlay kikapcsolva
-                            } else {
-                                openButton.style.display = 'block'; // Chat zárva, overlay bekapcsolva
+                                if (isChatVisible) {
+                                    openButton.style.display = 'none'; // Chat nyitva, overlay kikapcsolva
+                                    console.log('Chat nyitva, overlay kikapcsolva');
+                                } else {
+                                    openButton.style.display = 'block'; // Chat zárva, overlay bekapcsolva
+                                    console.log('Chat zárva, overlay bekapcsolva');
+                                }
                             }
-                        } else {
-                            console.log('Launcher gomb nem található');
-                            openButton.style.display = 'block'; // Ha nincs launcher, overlay látható
-                        }
-                    }, 1000); // 1 másodpercenként ellenőrzi
+                        });
+                    });
 
-                    // Kezdeti állapot
-                    openButton.style.display = 'block'; // Alapból látható
-                    console.log('Kezdeti állapot: Overlay bekapcsolva');
+                    // Widget keresése és figyelése
+                    const checkWidget = setInterval(() => {
+                        const widget = document.querySelector('.vfrc-widget._1wkq7nf0._1wkq7nf1');
+                        if (widget) {
+                            observer.observe(widget, { 
+                                attributes: true, // Osztályok, stílusok, attribútumok
+                                childList: true,  // Gyerekelemek
+                                subtree: true     // Al-elemek
+                            });
+                            clearInterval(checkWidget);
+                            console.log('Widget megtalálva, figyelés megkezdve');
+                            openButton.style.display = 'block'; // Alapból látható
+                        }
+                    }, 100);
+
                 } else {
                     console.error('Nyitás gomb nem található');
                 }
