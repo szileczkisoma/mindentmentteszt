@@ -231,22 +231,23 @@
                 window.voiceflow.chat.proactive.clear();
                 window.voiceflow.chat.proactive.push({ 
                     type: 'text', 
-                    payload: { message: 'Segíthetek valamiben?' }
+                    payload: { message: 'Kő kóla genyó?' }
                 });
 
-                // Figyeljük a proaktív üzenet megjelenését és adjunk hozzá kattintás eseményt
+                // Figyeljük a .vfrc-proactive osztályú elemet
                 const checkProactive = setInterval(function() {
-                    const proactiveBubble = document.querySelector('div[data-type="proactive"]'); // Voiceflow proaktív üzenet szelektor
+                    const proactiveBubble = document.querySelector('.vfrc-proactive');
                     if (proactiveBubble) {
                         proactiveBubble.style.cursor = 'pointer'; // Jelzi, hogy kattintható
                         proactiveBubble.addEventListener('click', function() {
                             if (window.voiceflow && window.voiceflow.chat) {
                                 window.voiceflow.chat.open();
+                                console.log('Chat megnyitva');
                             } else {
                                 console.error('Voiceflow chat nem érhető el');
                             }
                         });
-                        clearInterval(checkProactive); // Megállítjuk az ellenőrzést, ha megtaláltuk
+                        clearInterval(checkProactive); // Megállítjuk az ellenőrzést
                     }
                 }, 500); // 500ms-enként ellenőrzi
             }, 5000); // 5000 ms = 5 másodperc
