@@ -253,54 +253,38 @@
                     });
                 }, 5000);
 
-                // Overlay és widget kezelése
+                // Overlay és launcher kezelése
                 const openButton = document.querySelector('.nyitas-gomb');
 
                 if (openButton) {
-                    // Kattintás kezelése az overlay-re
+                    // Nyitás gomb kattintása
                     openButton.addEventListener('click', function() {
                         console.log('Nyitás gomb kattintás történt');
                         if (window.voiceflow && window.voiceflow.chat) {
                             window.voiceflow.chat.open();
                             console.log('Chat megnyitási kísérlet');
-                            openButton.style.display = 'none'; // Overlay manuális kikapcsolása
+                            openButton.style.display = 'none'; // Overlay kikapcsolása
                         } else {
                             console.error('Voiceflow chat nem érhető el');
                         }
                     });
 
-                    // Widget változásának figyelése
-                    const observer = new MutationObserver(function(mutations) {
-                        mutations.forEach(mutation => {
-                            console.log('Widget változás észlelve:', mutation);
-                            const widget = document.querySelector('.vfrc-widget');
-                            if (widget) {
-                                const chatWindow = widget.querySelector('.vfrc-chat');
-                                const isChatVisible = chatWindow && getComputedStyle(chatWindow).display !== 'none';
-                                console.log('Chat látható?', isChatVisible);
-
-                                if (isChatVisible) {
-                                    openButton.style.display = 'none'; // Chat nyitva, overlay kikapcsolva
-                                    console.log('Chat nyitva, overlay kikapcsolva');
+                    // Launcher gomb kattintásának figyelése
+                    const checkLauncher = setInterval(() => {
+                        const launcherButton = document.querySelector('.vfrc-launcher');
+                        if (launcherButton) {
+                            launcherButton.addEventListener('click', function() {
+                                console.log('Launcher gomb kattintás történt');
+                                if (openButton.style.display === 'block' || openButton.style.display === '') {
+                                    openButton.style.display = 'none'; // Overlay kikapcsolása
+                                    console.log('Overlay kikapcsolva (launcher kattintás)');
                                 } else {
-                                    openButton.style.display = 'block'; // Chat zárva, overlay bekapcsolva
-                                    console.log('Chat zárva, overlay bekapcsolva');
+                                    openButton.style.display = 'block'; // Overlay bekapcsolása
+                                    console.log('Overlay bekapcsolva (launcher kattintás)');
                                 }
-                            }
-                        });
-                    });
-
-                    // Widget keresése és figyelése
-                    const checkWidget = setInterval(() => {
-                        const widget = document.querySelector('.vfrc-widget._1wkq7nf0._1wkq7nf1');
-                        if (widget) {
-                            observer.observe(widget, { 
-                                attributes: true, // Osztályok, stílusok, attribútumok
-                                childList: true,  // Gyerekelemek
-                                subtree: true     // Al-elemek
                             });
-                            clearInterval(checkWidget);
-                            console.log('Widget megtalálva, figyelés megkezdve');
+                            clearInterval(checkLauncher);
+                            console.log('Launcher megtalálva, kattintás figyelése megkezdve');
                             openButton.style.display = 'block'; // Alapból látható
                         }
                     }, 100);
