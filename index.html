@@ -263,41 +263,34 @@
                         if (window.voiceflow && window.voiceflow.chat) {
                             window.voiceflow.chat.open();
                             console.log('Chat megnyitási kísérlet');
+                            openButton.style.display = 'none'; // Overlay manuális kikapcsolása
                         } else {
                             console.error('Voiceflow chat nem érhető el');
                         }
                     });
 
-                    // Launcher gomb bármilyen változásának figyelése
-                    const observer = new MutationObserver(function(mutations) {
-                        mutations.forEach(mutation => {
-                            console.log('Launcher változás észlelve:', mutation);
-                            // Toggle: ha látható, legyen rejtett; ha rejtett, legyen látható
-                            if (openButton.style.display === 'block' || openButton.style.display === '') {
-                                openButton.style.display = 'none';
-                                console.log('Overlay kikapcsolva');
-                            } else {
-                                openButton.style.display = 'block';
-                                console.log('Overlay bekapcsolva');
-                            }
-                        });
-                    });
-
-                    // Launcher gomb keresése és figyelése
-                    const checkLauncher = setInterval(() => {
+                    // Launcher gomb ellenőrzése időzítővel
+                    setInterval(() => {
                         const launcherButton = document.querySelector('.vfrc-launcher');
                         if (launcherButton) {
-                            observer.observe(launcherButton, { 
-                                attributes: true, // Osztályok, stílusok, attribútumok
-                                childList: true,  // Gyerekelemek
-                                subtree: true     // Al-elemek
-                            });
-                            clearInterval(checkLauncher);
-                            console.log('Launcher megtalálva, figyelés megkezdve');
-                            openButton.style.display = 'block'; // Alapból látható
-                        }
-                    }, 100);
+                            const isChatOpen = launcherButton.classList.contains('_15s29m93');
+                            console.log('Launcher osztályok:', launcherButton.classList.toString());
+                            console.log('Chat nyitva?', isChatOpen);
 
+                            if (isChatOpen) {
+                                openButton.style.display = 'none'; // Chat nyitva, overlay kikapcsolva
+                            } else {
+                                openButton.style.display = 'block'; // Chat zárva, overlay bekapcsolva
+                            }
+                        } else {
+                            console.log('Launcher gomb nem található');
+                            openButton.style.display = 'block'; // Ha nincs launcher, overlay látható
+                        }
+                    }, 1000); // 1 másodpercenként ellenőrzi
+
+                    // Kezdeti állapot
+                    openButton.style.display = 'block'; // Alapból látható
+                    console.log('Kezdeti állapot: Overlay bekapcsolva');
                 } else {
                     console.error('Nyitás gomb nem található');
                 }
