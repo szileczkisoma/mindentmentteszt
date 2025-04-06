@@ -213,6 +213,7 @@
     (function(d, t) {
         var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
         v.onload = function() {
+            console.log('Voiceflow script betöltve');
             window.voiceflow.chat.load({
                 verify: { projectID: '67eb9441e65fd8cb380c11fc' },
                 url: 'https://general-runtime.voiceflow.com',
@@ -224,37 +225,47 @@
                 voice: {
                     url: "https://runtime-api.voiceflow.com"
                 }
+            }).then(() => {
+                console.log('Voiceflow chat inicializálva');
+            }).catch((err) => {
+                console.error('Hiba a Voiceflow betöltésekor:', err);
             });
 
             // 5 másodperc késleltetés a proaktív üzenethez
             setTimeout(function() {
-                window.voiceflow.chat.proactive.clear();
-                window.voiceflow.chat.proactive.push({ 
-                    type: 'text', 
-                    payload: { message: 'Kell fogász?' }
-                });
+                if (window.voiceflow && window.voiceflow.chat) {
+                    console.log('Proaktív üzenet küldése...');
+                    window.voiceflow.chat.proactive.clear();
+                    window.voiceflow.chat.proactive.push({ 
+                        type: 'text', 
+                        payload: { message: 'Kell fogász?' }
+                    });
 
-                // Figyeljük a ._6r9xee3.o231sh1 osztályú elemet
-                const checkProactive = setInterval(function() {
-                    const proactiveBubble = document.querySelector('._6r9xee3.o231sh1');
-                    if (proactiveBubble) {
-                        console.log('Proaktív üzenet megtalálva:', proactiveBubble);
-                        proactiveBubble.style.cursor = 'pointer !important'; // Erősebb kurzor beállítás
-                        proactiveBubble.style.userSelect = 'none'; // Szöveg kijelölésének tiltása
-                        proactiveBubble.addEventListener('click', function() {
-                            if (window.voiceflow && window.voiceflow.chat) {
-                                console.log('Kattintás történt, chat megnyitása...');
-                                window.voiceflow.chat.open();
-                            } else {
-                                console.error('Voiceflow chat nem érhető el');
-                            }
-                        });
-                        clearInterval(checkProactive); // Megállítjuk az ellenőrzést
-                    } else {
-                        console.log('Proaktív üzenet még nem található');
-                    }
-                }, 500); // 500ms-enként ellenőrzi
-            }, 5000); // 5000 ms = 5 másodperc
+                    // Figyeljük a proaktív üzenetet
+                    const checkProactive = setInterval(function() {
+                        const proactiveBubble = document.querySelector('._6r9xee3.o231sh1') || document.querySelector('.vfrc-proactive');
+                        if (proactiveBubble) {
+                            console.log('Proaktív üzenet megtalálva:', proactiveBubble);
+                            proactiveBubble.style.cursor = 'pointer !important';
+                            proactiveBubble.style.userSelect = 'none !important';
+                            proactiveBubble.addEventListener('click', function() {
+                                console.log('Kattintás történt az üzeneten');
+                                if (window.voiceflow && window.voiceflow.chat) {
+                                    window.voiceflow.chat.open();
+                                    console.log('Chat megnyitási kísérlet');
+                                } else {
+                                    console.error('Voiceflow chat nem érhető el kattintáskor');
+                                }
+                            });
+                            clearInterval(checkProactive);
+                        } else {
+                            console.log('Proaktív üzenet még nem található');
+                        }
+                    }, 500);
+                } else {
+                    console.error('Voiceflow nem töltött be a proaktív üzenet előtt');
+                }
+            }, 5000);
         };
         v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
         v.type = "text/javascript";
