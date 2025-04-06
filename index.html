@@ -27,16 +27,15 @@
         .page.active {
             display: block;
         }
-        /* Nyitás gomb stílusa */
         .nyitas-gomb {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            width: 100px; /* Nagyobb méret */
+            width: 100px;
             height: 200px;
             background: transparent;
             cursor: pointer;
-            z-index: 100000; /* Nagyon magas z-index, hogy felül legyen */
+            z-index: 100000;
             border: 1px solid red;
         }
     </style>
@@ -84,7 +83,7 @@
             type: 'response',
             match: ({ trace }) => {
                 const isMatch = trace.type === 'ext_date' || (trace.payload && trace.payload.name === 'ext_date');
-                console.log('Match called with trace:', trace, 'Result:', isMatch); // Debug
+                console.log('Match called with trace:', trace, 'Result:', isMatch);
                 return isMatch;
             },
             render: ({ trace, element }) => {
@@ -269,24 +268,28 @@
                         }
                     });
 
-                    // Launcher gomb kattintásának figyelése
-                    const launcherButton = document.querySelector('button.vfrc-button.vfrc-launcher[title="Segíthetek?"]');
-                    if (launcherButton) {
-                        launcherButton.addEventListener('click', function() {
-                            console.log('Launcher gomb kattintás történt, osztályok:', launcherButton.classList.toString());
-                            if (openButton.style.display === 'block' || openButton.style.display === '') {
-                                openButton.style.display = 'none'; // Overlay kikapcsolása
-                                console.log('Overlay kikapcsolva');
-                            } else {
-                                openButton.style.display = 'block'; // Overlay bekapcsolása
-                                console.log('Overlay bekapcsolva');
-                            }
-                        });
-                        console.log('Launcher megtalálva, kattintás figyelése megkezdve');
-                    } else {
-                        console.error('Launcher gomb nem található azonnal, Voiceflow még tölt');
+                    // Launcher gomb várakozás és kattintás figyelése
+                    function waitForLauncher() {
+                        const launcherButton = document.querySelector('button[title="Segíthetek?"]');
+                        if (launcherButton) {
+                            launcherButton.addEventListener('click', function() {
+                                console.log('Launcher gomb kattintás történt, osztályok:', launcherButton.classList.toString());
+                                if (openButton.style.display === 'block' || openButton.style.display === '') {
+                                    openButton.style.display = 'none'; // Overlay kikapcsolása
+                                    console.log('Overlay kikapcsolva');
+                                } else {
+                                    openButton.style.display = 'block'; // Overlay bekapcsolása
+                                    console.log('Overlay bekapcsolva');
+                                }
+                            });
+                            console.log('Launcher megtalálva, kattintás figyelése megkezdve');
+                        } else {
+                            console.log('Launcher még nem található, várakozás...');
+                            setTimeout(waitForLauncher, 500); // 500ms után újra próbál
+                        }
                     }
 
+                    waitForLauncher(); // Elindítjuk a várakozást
                     openButton.style.display = 'block'; // Alapból látható
                 } else {
                     console.error('Nyitás gomb nem található');
