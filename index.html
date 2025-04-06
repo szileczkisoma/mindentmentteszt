@@ -27,7 +27,6 @@
         .page.active {
             display: block;
         }
-        /* Overlay stílusa */
         .proactive-overlay {
             position: absolute;
             top: 0;
@@ -36,7 +35,7 @@
             height: 100%;
             background: transparent;
             cursor: pointer;
-            z-index: 1000; /* Biztosítja, hogy az overlay legyen felül */
+            z-index: 1000;
         }
     </style>
 </head>
@@ -252,8 +251,11 @@
                         payload: { message: 'Kell fogász?' }
                     });
 
-                    // Figyeljük a proaktív üzenetet
+                    // Figyeljük a proaktív üzenetet hosszabb ideig
+                    let attempts = 0;
+                    const maxAttempts = 30; // 15 másodperc (30 * 500ms)
                     const checkProactive = setInterval(function() {
+                        attempts++;
                         const proactiveContainer = document.querySelector('.vfrc-proactive');
                         if (proactiveContainer) {
                             console.log('Proaktív konténer megtalálva:', proactiveContainer);
@@ -271,13 +273,17 @@
                                 }
                             });
 
-                            // Pozicionáljuk az overlay-t a konténerhez képest
-                            proactiveContainer.style.position = 'relative'; // Biztosítjuk, hogy a konténer pozicionált legyen
+                            // Pozicionáljuk az overlay-t
+                            proactiveContainer.style.position = 'relative';
                             proactiveContainer.appendChild(overlay);
 
                             clearInterval(checkProactive);
                         } else {
-                            console.log('Proaktív konténer még nem található');
+                            console.log('Proaktív konténer még nem található, próbálkozás:', attempts);
+                            if (attempts >= maxAttempts) {
+                                console.error('Proaktív konténer nem található 15 másodperc után');
+                                clearInterval(checkProactive);
+                            }
                         }
                     }, 500);
                 } else {
