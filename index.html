@@ -272,16 +272,21 @@
 
                     // Chat állapot figyelése
                     const observer = new MutationObserver(function(mutations) {
-                        const computedStyle = getComputedStyle(chatContainer);
-                        const isChatVisible = computedStyle.display !== 'none' && 
-                                            computedStyle.visibility !== 'hidden' && 
-                                            computedStyle.opacity !== '0' &&
-                                            chatContainer.offsetParent !== null;
+                        const chatWindow = chatContainer.querySelector('.vfrc-chat'); // A tényleges chat ablak
+                        if (chatWindow) {
+                            const computedStyle = getComputedStyle(chatWindow);
+                            const isChatVisible = computedStyle.display !== 'none' && 
+                                                computedStyle.visibility !== 'hidden' && 
+                                                computedStyle.opacity !== '0' &&
+                                                chatWindow.offsetParent !== null;
 
-                        if (isChatVisible) {
-                            openButton.style.display = 'none'; // Chat látható, overlay kikapcsolva
+                            if (isChatVisible) {
+                                openButton.style.display = 'none'; // Chat látható, overlay kikapcsolva
+                            } else {
+                                openButton.style.display = 'block'; // Chat rejtett, overlay vissza
+                            }
                         } else {
-                            openButton.style.display = 'block'; // Chat rejtett, overlay vissza
+                            openButton.style.display = 'block'; // Ha a chat ablak még nincs, overlay látható
                         }
                     });
 
@@ -292,10 +297,19 @@
                         subtree: true 
                     });
 
-                    // Kezdeti állapot ellenőrzése
-                    const initialStyle = getComputedStyle(chatContainer);
-                    if (initialStyle.display !== 'none' && initialStyle.visibility !== 'hidden') {
-                        openButton.style.display = 'none';
+                    // Kezdeti állapot: csak a .vfrc-chat alapján döntünk
+                    const chatWindow = chatContainer.querySelector('.vfrc-chat');
+                    if (chatWindow) {
+                        const initialStyle = getComputedStyle(chatWindow);
+                        const isInitiallyOpen = initialStyle.display !== 'none' && 
+                                              initialStyle.visibility !== 'hidden';
+                        if (isInitiallyOpen) {
+                            openButton.style.display = 'none';
+                        } else {
+                            openButton.style.display = 'block';
+                        }
+                    } else {
+                        openButton.style.display = 'block'; // Ha nincs még chat ablak, overlay látható
                     }
                 } else {
                     console.error('Nyitás gomb vagy chat konténer nem található');
