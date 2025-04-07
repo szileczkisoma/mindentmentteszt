@@ -37,7 +37,16 @@
             cursor: pointer;
             z-index: 100000;
             border: 1px solid red;
+            clip-path: polygon(
+                0 0,         /* bal felső sarok */
+                100% 0,      /* jobb felső sarok */
+                100% 70%,    /* le a szár tetejéig */
+                40% 70%,     /* balra szűkül */
+                40% 100%,    /* teljesen le a keskeny szár */
+                0 100%       /* bal alsó sarok */
+            );
         }
+
     </style>
 </head>
 <body>
