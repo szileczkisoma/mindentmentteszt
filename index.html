@@ -261,12 +261,12 @@
                     nyitasGomb.style.display = 'none';
                 });
                 
-                // Figyelő hozzáadása a "Segíthetek?" gombra, amely a shadow DOM-ban van
+                // Figyelő hozzáadása a shadow DOM-ban lévő gombokra
                 // MutationObserver használata a shadow DOM megfigyelésére
                 const voiceflowChatElement = document.getElementById('voiceflow-chat');
                 
                 // Speciális eseményfigyelő a shadow DOM-on belüli elemek figyelésére
-                const checkForHelpButton = () => {
+                const checkForButtons = () => {
                     try {
                         if (voiceflowChatElement && voiceflowChatElement.shadowRoot) {
                             // Shadow DOM elérése
@@ -274,6 +274,11 @@
                             
                             // A "Segíthetek?" gomb figyelése kattintásra
                             const helpButton = shadowRoot.querySelector('button[title="Segíthetek?"]');
+                            
+                            // Restart gomb keresése (ez csak telefonos verzión jelenik meg)
+                            const restartButton = shadowRoot.querySelector('button[title="Restart chat"]');
+                            
+                            let buttonFound = false;
                             
                             if (helpButton) {
                                 console.log('Segíthetek? gomb megtalálva');
@@ -284,8 +289,22 @@
                                     nyitasGomb.style.display = 'block';
                                 });
                                 
-                                return true;
+                                buttonFound = true;
                             }
+                            
+                            if (restartButton) {
+                                console.log('Restart chat gomb megtalálva (telefonos verzió)');
+                                
+                                restartButton.addEventListener('click', function() {
+                                    console.log('Restart chat gombra kattintottak');
+                                    // Nyitás gomb láthatóságának átváltása
+                                    nyitasGomb.style.display = nyitasGomb.style.display === 'none' ? 'block' : 'none';
+                                });
+                                
+                                buttonFound = true;
+                            }
+                            
+                            return buttonFound;
                         }
                     } catch (e) {
                         console.error('Hiba a shadow DOM elérése során:', e);
@@ -296,13 +315,13 @@
                 // Megfigyelő beállítása a DOM változásokra
                 const observeDOMChanges = () => {
                     // Ellenőrizzük induláskor
-                    if (checkForHelpButton()) return;
+                    if (checkForButtons()) return;
                     
                     // Ha nem találtuk, figyelni kezdünk a változásokra
                     const observer = new MutationObserver((mutations) => {
                         for (const mutation of mutations) {
                             if (mutation.type === 'childList' || mutation.type === 'subtree') {
-                                if (checkForHelpButton()) {
+                                if (checkForButtons()) {
                                     observer.disconnect();
                                     break;
                                 }
@@ -318,7 +337,7 @@
                     
                     // Időszakos ellenőrzés is (shadow DOM-hoz)
                     const intervalId = setInterval(() => {
-                        if (checkForHelpButton()) {
+                        if (checkForButtons()) {
                             clearInterval(intervalId);
                         }
                     }, 1000);
