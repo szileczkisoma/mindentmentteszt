@@ -27,28 +27,6 @@
         .page.active {
             display: block;
         }
-        .nyitas-gomb {
-              position: fixed;
-              bottom: 20px;
-              right: 20px;
-              width: 210px;
-              height: 190px;
-              background: transparent;
-              border: 1px solid red;
-              z-index: 100000;
-              cursor: pointer;
-              clip-path: polygon(
-                100px 190px,   /* bal alsó sarok */
-                110px 190px,   /* jobbra: 110px széles alap */
-                110px 0px,     /* jobb szár teteje */
-                0px 0px,       /* balra vissza a felső vízszintes teteje */
-                0px 130px,     /* le 130px-ig */
-                100px 130px,   /* jobbra: a felső vízszintes "tető" */
-                100px 190px    /* vissza az alap bal szárához */
-              );
-        }
-
-
     </style>
 </head>
 <body>
@@ -72,9 +50,6 @@
         <h1>Implantátumok</h1>
         <p>Itt megismerheted implantátumainkat</p>
     </div>
-
-    <!-- Nyitás gomb -->
-    <div class="nyitas-gomb"></div>
 
     <script>
         function showPage(pageId) {
@@ -260,101 +235,60 @@
                         payload: { message: 'Kell fogász?' }
                     });
                 }, 5000);
-                
-                const nyitasGomb = document.querySelector('.nyitas-gomb');
-                
-                // A nyitás-gomb eseménykezelőjének hozzáadása a Voiceflow betöltése után
-                nyitasGomb.addEventListener('click', function() {
-                    window.voiceflow.chat.open();
-                    console.log('Voiceflow chatbot megnyitva');
-                    
-                    // A gomb elrejtése a kattintás után
-                    nyitasGomb.style.display = 'none';
-                });
-                
-                // Figyelő hozzáadása a shadow DOM-ban lévő gombokra
-                // MutationObserver használata a shadow DOM megfigyelésére
+
+                // Shadow DOM figyelése a proaktív üzenet eléréséhez
                 const voiceflowChatElement = document.getElementById('voiceflow-chat');
-                
-                // Speciális eseményfigyelő a shadow DOM-on belüli elemek figyelésére
-                const checkForButtons = () => {
+
+                const checkForProactiveMessage = () => {
                     try {
                         if (voiceflowChatElement && voiceflowChatElement.shadowRoot) {
-                            // Shadow DOM elérése
                             const shadowRoot = voiceflowChatElement.shadowRoot;
+                            // A proaktív üzenet konténerének keresése
+                            const proactiveBubble = shadowRoot.querySelector('.vfrc-proactive');
                             
-                            // A "Segíthetek?" gomb figyelése kattintásra
-                            const helpButton = shadowRoot.querySelector('button[title="Segíthetek?"]');
-                            
-                            // Restart gomb keresése (ez csak telefonos verzión jelenik meg)
-                            const restartButton = shadowRoot.querySelector('button[title="Restart chat"]');
-                            
-                            let buttonFound = false;
-                            
-                            if (helpButton) {
-                                console.log('Segíthetek? gomb megtalálva');
-                                
-                                helpButton.addEventListener('click', function() {
-                                    console.log('Segíthetek? gombra kattintottak');
-                                    // Nyitás gomb újra megjelenítése
-                                    nyitasGomb.style.display = 'block';
+                            if (proactiveBubble) {
+                                console.log('Proaktív üzenet megtalálva');
+                                proactiveBubble.addEventListener('click', () => {
+                                    window.voiceflow.chat.open();
+                                    console.log('Proaktív üzenetre kattintottak, chat megnyitva');
                                 });
-                                
-                                buttonFound = true;
+                                return true;
                             }
-                            
-                            if (restartButton) {
-                                console.log('Restart chat gomb megtalálva (telefonos verzió)');
-                                
-                                restartButton.addEventListener('click', function() {
-                                    console.log('Restart chat gombra kattintottak');
-                                    // Nyitás gomb láthatóságának átváltása
-                                    nyitasGomb.style.display = nyitasGomb.style.display === 'none' ? 'block' : 'none';
-                                });
-                                
-                                buttonFound = true;
-                            }
-                            
-                            return buttonFound;
                         }
                     } catch (e) {
                         console.error('Hiba a shadow DOM elérése során:', e);
                     }
                     return false;
                 };
-                
-                // Megfigyelő beállítása a DOM változásokra
+
+                // Megfigyelés indítása
                 const observeDOMChanges = () => {
-                    // Ellenőrizzük induláskor
-                    if (checkForButtons()) return;
-                    
-                    // Ha nem találtuk, figyelni kezdünk a változásokra
+                    if (checkForProactiveMessage()) return;
+
                     const observer = new MutationObserver((mutations) => {
                         for (const mutation of mutations) {
                             if (mutation.type === 'childList' || mutation.type === 'subtree') {
-                                if (checkForButtons()) {
+                                if (checkForProactiveMessage()) {
                                     observer.disconnect();
                                     break;
                                 }
                             }
                         }
                     });
-                    
-                    // Az egész dokumentumot figyeljük
+
                     observer.observe(document.body, { 
                         childList: true, 
                         subtree: true 
                     });
-                    
-                    // Időszakos ellenőrzés is (shadow DOM-hoz)
+
+                    // Időszakos ellenőrzés
                     const intervalId = setInterval(() => {
-                        if (checkForButtons()) {
+                        if (checkForProactiveMessage()) {
                             clearInterval(intervalId);
                         }
                     }, 1000);
                 };
-                
-                // Megfigyelés indítása
+
                 setTimeout(observeDOMChanges, 1000);
             });
         };
