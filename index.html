@@ -28,24 +28,26 @@
             display: block;
         }
         .nyitas-gomb {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 100px;
-            height: 200px;
-            background: transparent;
-            cursor: pointer;
-            z-index: 100000;
-            border: 1px solid red;
-            clip-path: polygon(
-                0 0,         /* bal felső sarok */
-                100% 0,      /* jobb felső sarok */
-                100% 70%,    /* le a szár tetejéig */
-                40% 70%,     /* balra szűkül */
-                40% 100%,    /* teljesen le a keskeny szár */
-                0 100%       /* bal alsó sarok */
-            );
+              position: fixed;
+              bottom: 20px;
+              right: 20px;
+              width: 210px;
+              height: 190px;
+              background: transparent;
+              border: 1px solid red;
+              z-index: 100000;
+              cursor: pointer;
+              clip-path: polygon(
+                100px 190px,   /* bal alsó sarok */
+                110px 190px,   /* jobbra: 110px széles alap */
+                110px 0px,     /* jobb szár teteje */
+                0px 0px,       /* balra vissza a felső vízszintes teteje */
+                0px 130px,     /* le 130px-ig */
+                100px 130px,   /* jobbra: a felső vízszintes "tető" */
+                100px 190px    /* vissza az alap bal szárához */
+              );
         }
+
 
     </style>
 </head>
