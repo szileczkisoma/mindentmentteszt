@@ -134,7 +134,9 @@
 }
 
 .vfrc-proactive {
-  height: calc(100% + 150px) !important;
+  position: fixed;
+  bottom: 140px;
+  right: 10px;
 }
 
 .vfrc-proactive .vfrc-button {
