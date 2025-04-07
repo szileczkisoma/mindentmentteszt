@@ -23,6 +23,11 @@
   .vfrc-proactive {
     height: calc(100% + 170px) !important; /* Az alapmagassághoz képest +170px telefonon */
   }
+
+  .jsli367 {
+  overflow: visible;
+  padding-left: 60px;
+}
 }
 
 .vfrc-header {
