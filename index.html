@@ -226,15 +226,43 @@
                     url: "https://runtime-api.voiceflow.com"
                 }
             }).then(() => {
-                // Proaktív üzenet küldése 5 másodperc után
-                setTimeout(function() {
-                    console.log('Proaktív üzenet küldése...');
-                    window.voiceflow.chat.proactive.clear();
-                    window.voiceflow.chat.proactive.push({ 
-                        type: 'text', 
-                        payload: { message: 'Kell fogász?' }
-                    });
-                }, 5000);
+                // Globális változó a chat állapotának követésére
+                let isChatOpen = false;
+                let proactiveTimeout = null;
+
+                // Chat állapotának figyelése
+                window.addEventListener('message', (event) => {
+                    if (event.data && typeof event.data === 'string') {
+                        const data = JSON.parse(event.data);
+                        if (data.type === 'voiceflow:open') {
+                            isChatOpen = true; // Chat megnyílt
+                            console.log('Chat window opened');
+                            clearTimeout(proactiveTimeout); // Számláló leállítása
+                        } else if (data.type === 'voiceflow:close') {
+                            isChatOpen = false; // Chat bezárult
+                            console.log('Chat window closed');
+                            startProactiveTimer(); // Számláló újraindítása
+                        }
+                    }
+                }, false);
+
+                // Proaktív üzenet időzítő függvény
+                function startProactiveTimer() {
+                    if (!isChatOpen && !proactiveTimeout) { // Csak ha a chat nincs nyitva
+                        proactiveTimeout = setTimeout(function() {
+                            console.log('Proaktív üzenet küldése...');
+                            window.voiceflow.chat.proactive.clear();
+                            window.voiceflow.chat.proactive.push({ 
+                                type: 'text', 
+                                payload: { message: 'Kell fogász?' }
+                            });
+                            proactiveTimeout = null; // Timeout befejeződött
+                        }, 10000); // 10 másodperc
+                    }
+                }
+
+                // Kezdeti időzítő indítása
+                startProactiveTimer();
 
                 // Shadow DOM figyelése a proaktív üzenet eléréséhez
                 const voiceflowChatElement = document.getElementById('voiceflow-chat');
@@ -243,7 +271,6 @@
                     try {
                         if (voiceflowChatElement && voiceflowChatElement.shadowRoot) {
                             const shadowRoot = voiceflowChatElement.shadowRoot;
-                            // A proaktív üzenet konténerének keresése
                             const proactiveBubble = shadowRoot.querySelector('._6r9xee4');
                             
                             if (proactiveBubble) {
@@ -261,7 +288,6 @@
                     return false;
                 };
 
-                // Megfigyelés indítása
                 const observeDOMChanges = () => {
                     if (checkForProactiveMessage()) return;
 
@@ -281,7 +307,6 @@
                         subtree: true 
                     });
 
-                    // Időszakos ellenőrzés
                     const intervalId = setInterval(() => {
                         if (checkForProactiveMessage()) {
                             clearInterval(intervalId);
