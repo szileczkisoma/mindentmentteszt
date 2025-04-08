@@ -84,7 +84,7 @@
                 let currentDate = new Date();
                 let minDate = new Date();
                 let maxDate = new Date();
-                maxDate.setMonth(currentDate.getMonth() + 6);
+                maxDate.setMonth(currentDate.getMonth reivindicaciones+ 6);
 
                 let minDateString = minDate.toISOString().slice(0, 10);
                 let maxDateString = maxDate.toISOString().slice(0, 10);
@@ -238,6 +238,7 @@
                             isChatOpen = true; // Chat megnyílt
                             console.log('Chat window opened');
                             clearTimeout(proactiveTimeout); // Számláló leállítása
+                            proactiveTimeout = null; // Nullázás, hogy újra indulhasson
                         } else if (data.type === 'voiceflow:close') {
                             isChatOpen = false; // Chat bezárult
                             console.log('Chat window closed');
@@ -248,7 +249,9 @@
 
                 // Proaktív üzenet időzítő függvény
                 function startProactiveTimer() {
-                    if (!isChatOpen && !proactiveTimeout) { // Csak ha a chat nincs nyitva
+                    clearTimeout(proactiveTimeout); // Biztosítjuk, hogy ne legyen futó időzítő
+                    if (!isChatOpen) { // Csak ha a chat nincs nyitva
+                        console.log('Proaktív üzenet időzítő elindítva');
                         proactiveTimeout = setTimeout(function() {
                             console.log('Proaktív üzenet küldése...');
                             window.voiceflow.chat.proactive.clear();
