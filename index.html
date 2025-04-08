@@ -208,7 +208,7 @@
         };
     </script>
 
-    <!-- Voiceflow script javított eseménnyel -->
+    <!-- Voiceflow script két proaktív üzenettel -->
     <script type="text/javascript">
     (function(d, t) {
         let isChatOpen = false; // Globális scope-ban
@@ -243,9 +243,9 @@
                 }
             }, false);
 
-            // Proaktív üzenet 10 másodperc után, mindenképp megjelenik
+            // Első proaktív üzenet: minden oldalon 10 másodperc után
             setTimeout(function() {
-                console.log('Proaktív üzenet küldése...');
+                console.log('Első proaktív üzenet küldése...');
                 window.voiceflow.chat.proactive.clear();
                 window.voiceflow.chat.proactive.push({ 
                     type: 'text', 
@@ -264,7 +264,34 @@
                         }
                     });
                 } else {
-                    console.log('Chat nyitva van, esemény nem triggerelve');
+                    console.log('Chat nyitva van, fogko_eltavolitas esemény nem triggerelve');
+                }
+            }, 10000); // 10 másodperc
+
+            // Második proaktív üzenet: csak az Implantátumok oldalon 10 másodperc után
+            setTimeout(function() {
+                if (window.location.hash === '#implantatumok') {
+                    console.log('Második proaktív üzenet küldése az Implantátumok oldalon...');
+                    window.voiceflow.chat.proactive.clear();
+                    window.voiceflow.chat.proactive.push({ 
+                        type: 'text', 
+                        payload: { message: 'Érdekel egy AlphaBio MultiNeo implantátum?' }
+                    });
+
+                    // Esemény triggerelése, ha a chat nincs megnyitva
+                    if (!isChatOpen) {
+                        console.log('AlphaBio MultiNeo esemény triggerelve');
+                        window.voiceflow.chat.interact({
+                            type: 'event',
+                            payload: {
+                                event: {
+                                    name: 'alphabio_multineo_implantatum'
+                                }
+                            }
+                        });
+                    } else {
+                        console.log('Chat nyitva van, alphabio_multineo_implantatum esemény nem triggerelve');
+                    }
                 }
             }, 10000); // 10 másodperc
 
