@@ -177,9 +177,10 @@
   justify-content: left;
 }
 
-.jsli367 {
+.jsli365 {
   overflow: visible;
-  padding-left: 60px;
+  position: relative;
+  left: 55px;
 }
   
 .jyiuei3 {
