@@ -208,11 +208,10 @@
         };
     </script>
 
-    <!-- Voiceflow script .then nélkül, módosított logikával -->
+    <!-- Voiceflow script javított eseménnyel -->
     <script type="text/javascript">
     (function(d, t) {
         let isChatOpen = false; // Globális scope-ban
-        let proactiveTimeout = null; // Globális scope-ban
 
         var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
         v.onload = function() {
@@ -237,49 +236,39 @@
                     if (data.type === 'voiceflow:open') {
                         isChatOpen = true; // Chat megnyílt
                         console.log('Chat window opened');
-                        clearTimeout(proactiveTimeout); // Számláló leállítása
-                        proactiveTimeout = null; // Nullázás, hogy újra indulhasson
                     } else if (data.type === 'voiceflow:close') {
                         isChatOpen = false; // Chat bezárult
                         console.log('Chat window closed');
-                        startProactiveTimer(); // Számláló újraindítása
                     }
                 }
             }, false);
 
-            // Proaktív üzenet időzítő függvény
-            function startProactiveTimer() {
-                clearTimeout(proactiveTimeout); // Biztosítjuk, hogy ne legyen futó időzítő
-                console.log('Proaktív üzenet időzítő elindítva');
-                proactiveTimeout = setTimeout(function() {
-                    console.log('Proaktív üzenet küldése...');
-                    window.voiceflow.chat.proactive.clear();
-                    window.voiceflow.chat.proactive.push({ 
-                        type: 'text', 
-                        payload: { message: 'Kell fogász?' }
-                    });
+            // Proaktív üzenet 10 másodperc után, mindenképp megjelenik
+            setTimeout(function() {
+                console.log('Proaktív üzenet küldése...');
+                window.voiceflow.chat.proactive.clear();
+                window.voiceflow.chat.proactive.push({ 
+                    type: 'text', 
+                    payload: { message: 'Kell fogász?' }
+                });
 
-                    // Esemény triggerelése, ha a chat nincs megnyitva
-                    if (!isChatOpen) {
-                        console.log('Fogkő-eltávolítás esemény triggerelve');
-                        window.voiceflow.chat.interact({
-                            type: 'event',
-                            payload: {
-                                event: { name: 'fogko-eltavolitas' }
+                // Esemény triggerelése, ha a chat nincs megnyitva
+                if (!isChatOpen) {
+                    console.log('Fogkő-eltávolítás esemény triggerelve');
+                    window.voiceflow.chat.interact({
+                        type: 'event',
+                        payload: {
+                            event: {
+                                name: 'fogko_eltavolitas'
                             }
-                        });
-                    } else {
-                        console.log('Chat nyitva van, esemény nem triggerelve');
-                    }
+                        }
+                    });
+                } else {
+                    console.log('Chat nyitva van, esemény nem triggerelve');
+                }
+            }, 10000); // 10 másodperc
 
-                    proactiveTimeout = null; // Timeout befejeződött
-                }, 10000); // 10 másodperc
-            }
-
-            // Kezdeti időzítő indítása
-            startProactiveTimer();
-
-            // Shadow DOM figyelése a proaktív üzenet eléréséhez
+            // Shadow DOM figyelése a proaktív üzenet eléréséhez, időzítő nélkül
             const voiceflowChatElement = document.getElementById('voiceflow-chat');
 
             const checkForProactiveMessage = () => {
@@ -321,15 +310,9 @@
                     childList: true, 
                     subtree: true 
                 });
-
-                const intervalId = setInterval(() => {
-                    if (checkForProactiveMessage()) {
-                        clearInterval(intervalId);
-                    }
-                }, 1000);
             };
 
-            setTimeout(observeDOMChanges, 1000);
+            observeDOMChanges(); // Közvetlenül meghívva, időzítő nélkül
         };
         v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
         v.type = "text/javascript";
