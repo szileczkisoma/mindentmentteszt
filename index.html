@@ -208,7 +208,7 @@
         };
     </script>
 
-    <!-- Voiceflow script két proaktív üzenettel -->
+    <!-- Voiceflow script, fogköves üzenet csak főoldalon -->
     <script type="text/javascript">
     (function(d, t) {
         let isChatOpen = false; // Globális scope-ban
@@ -243,28 +243,30 @@
                 }
             }, false);
 
-            // Első proaktív üzenet: minden oldalon 10 másodperc után
+            // Első proaktív üzenet: csak a főoldalon 10 másodperc után
             setTimeout(function() {
-                console.log('Első proaktív üzenet küldése...');
-                window.voiceflow.chat.proactive.clear();
-                window.voiceflow.chat.proactive.push({ 
-                    type: 'text', 
-                    payload: { message: 'Kell fogász?' }
-                });
-
-                // Esemény triggerelése, ha a chat nincs megnyitva
-                if (!isChatOpen) {
-                    console.log('Fogkő-eltávolítás esemény triggerelve');
-                    window.voiceflow.chat.interact({
-                        type: 'event',
-                        payload: {
-                            event: {
-                                name: 'fogko_eltavolitas'
-                            }
-                        }
+                if (window.location.hash === '#fooldal' || window.location.hash === '') {
+                    console.log('Első proaktív üzenet küldése a főoldalon...');
+                    window.voiceflow.chat.proactive.clear();
+                    window.voiceflow.chat.proactive.push({ 
+                        type: 'text', 
+                        payload: { message: 'Kell fogász?' }
                     });
-                } else {
-                    console.log('Chat nyitva van, fogko_eltavolitas esemény nem triggerelve');
+
+                    // Esemény triggerelése, ha a chat nincs megnyitva
+                    if (!isChatOpen) {
+                        console.log('Fogkő-eltávolítás esemény triggerelve');
+                        window.voiceflow.chat.interact({
+                            type: 'event',
+                            payload: {
+                                event: {
+                                    name: 'fogko_eltavolitas'
+                                }
+                            }
+                        });
+                    } else {
+                        console.log('Chat nyitva van, fogko_eltavolitas esemény nem triggerelve');
+                    }
                 }
             }, 10000); // 10 másodperc
 
