@@ -47,9 +47,14 @@
 }
 
 .vfrc-header .vfrc-avatar {
-  height: 140px;
-  width: 140px;
+  height: 60px;
+  width: 120px;
   display: block !important;
+  overflow: visible;
+}
+
+.vfrc-header .vfrc-avatar .g931q10 {
+  backround-color: #ffffff;
 }
 
 .vfrc-icon {
@@ -197,4 +202,8 @@
 .g3dqfd6 {
   transform: scale(0.9);
   margin: 1px 0 8px;
+}
+
+._6r9xee4 {
+  cursor: pointer;
 }
