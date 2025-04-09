@@ -26,7 +26,7 @@
 
   .jsli365 {
   overflow: visible;
-  padding-left: 55px;
+  position: relative;
 }
 }
 
@@ -209,4 +209,9 @@
 
 ._6r9xee4 {
   cursor: pointer;
+}
+
+._1q15b0b3 {
+  color: #ffffff;
+  background-color: #48AEE1;
 }
