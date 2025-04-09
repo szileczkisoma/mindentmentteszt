@@ -63,153 +63,7 @@
     </script>
 
     <!-- DateExtension script -->
-    <script>
-        const DateExtension = {
-            name: 'Date',
-            type: 'response',
-            match: ({ trace }) => {
-                const isMatch = trace.type === 'ext_date' || (trace.payload && trace.payload.name === 'ext_date');
-                console.log('Match called with trace:', trace, 'Result:', isMatch);
-                return isMatch;
-            },
-            render: ({ trace, element }) => {
-                if (!element) {
-                    console.error('Element not provided to DateExtension');
-                    return;
-                }
-
-                const formContainer = document.createElement('div');
-                formContainer.style.position = 'relative';
-
-                let currentDate = new Date();
-                let minDate = new Date();
-                let maxDate = new Date();
-                maxDate.setMonth(currentDate.getMonth() + 6);
-
-                let minDateString = minDate.toISOString().slice(0, 10);
-                let maxDateString = maxDate.toISOString().slice(0, 10);
-
-                formContainer.innerHTML = `
-                    <style>
-                        .date-select-container {
-                            position: relative;
-                            width: 100%;
-                        }
-                        .date-select-btn {
-                            background: linear-gradient(to right, #d3d3d3, #e0e0e0);
-                            border: none;
-                            color: #333;
-                            padding: 10px;
-                            border-radius: 5px;
-                            width: 100%;
-                            cursor: pointer;
-                            font: normal 14px sans-serif;
-                            text-align: center;
-                        }
-                        .date-select-btn:hover {
-                            opacity: 0.9;
-                        }
-                        .submit-button {
-                            background: #48AEE1;
-                            border: none;
-                            color: white;
-                            padding: 10px;
-                            border-radius: 5px;
-                            cursor: pointer;
-                            font: normal 14px sans-serif;
-                            width: 100%;
-                            margin-top: 10px;
-                            text-align: center;
-                            transition: opacity 0.3s;
-                        }
-                        .submit-button.submitted {
-                            opacity: 0.5;
-                            cursor: not-allowed;
-                        }
-                        .date-input {
-                            position: absolute;
-                            top: 0;
-                            left: 0;
-                            width: 100%;
-                            height: 100%;
-                            opacity: 0;
-                            pointer-events: none;
-                        }
-                        .date-input::-webkit-calendar-picker-indicator {
-                            position: absolute;
-                            top: 0;
-                            left: 0;
-                            right: 0;
-                            bottom: 0;
-                            width: 100%;
-                            height: 100%;
-                            cursor: pointer;
-                        }
-                    </style>
-                    <div class="date-select-container">
-                        <button class="date-select-btn">Dátum kiválasztása</button>
-                        <input type="date" class="date-input" min="${minDateString}" max="${maxDateString}" />
-                    </div>
-                `;
-
-                const dateSelectBtn = formContainer.querySelector('.date-select-btn');
-                const dateInput = formContainer.querySelector('.date-input');
-                let submitButton = null;
-
-                dateSelectBtn.addEventListener('click', () => {
-                    dateInput.style.pointerEvents = 'auto';
-                    try {
-                        dateInput.showPicker();
-                    } catch (e) {
-                        console.log("A showPicker nem támogatott:", e);
-                        dateInput.focus();
-                    }
-                });
-
-                dateInput.addEventListener('change', function () {
-                    const selectedDate = this.value;
-                    if (selectedDate) {
-                        dateSelectBtn.textContent = selectedDate;
-                        this.style.pointerEvents = 'none';
-
-                        if (!submitButton) {
-                            submitButton = document.createElement('button');
-                            submitButton.className = 'submit-button';
-                            submitButton.textContent = 'Küldés';
-                            formContainer.appendChild(submitButton);
-
-                            submitButton.addEventListener('click', () => {
-                                const currentDate = dateInput.value;
-                                submitButton.textContent = 'Elküldve';
-                                submitButton.classList.add('submitted');
-                                submitButton.disabled = true;
-
-                                console.log('Sending to Voiceflow:', { date: currentDate });
-                                window.voiceflow.chat.interact({
-                                    type: 'complete',
-                                    payload: { date: currentDate },
-                                });
-                            });
-                        }
-                    }
-                });
-
-                formContainer.addEventListener('click', (event) => {
-                    if (!formContainer.contains(event.target)) {
-                        dateInput.style.pointerEvents = 'none';
-                    }
-                });
-
-                setTimeout(() => {
-                    element.appendChild(formContainer);
-                    console.log('DateExtension rendered successfully');
-                }, 100);
-            },
-        };
-    </script>
-
-    <!-- Voiceflow script, fogköves üzenet csak főoldalon -->
-   <script type="text/javascript">
+    <script type="text/javascript">
 (function(d, t) {
     let isChatOpen = false; // Globális scope-ban
 
@@ -239,7 +93,8 @@
                     isChatOpen = true; // Chat megnyílt
                     console.log('Chat window opened');
                     // Biztosítjuk, hogy csak most történjen meg az autofocus eltávolítása
-                    removeAutoFocus(); // A chat megnyitásakor is
+                    removeAutoFocus(); // Fél másodperc várakozás
+                    blurTextArea(); // Fókusz eltávolítása a textarea-ról
                 } else if (data.type === 'voiceflow:close') {
                     isChatOpen = false; // Chat bezárult
                     console.log('Chat window closed');
@@ -345,6 +200,9 @@
         };
 
         observeDOMChanges(); // Közvetlenül meghívva, időzítő nélkül
+
+        // Még a betöltéskor is futtatjuk a fókusz eltávolítást
+        blurTextArea();
     };
 
     v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
@@ -374,8 +232,28 @@
         }
     }
 
-    // Indításkor is próbálkozzunk eltávolítani az autofocus-t, ha már betöltődött
-    removeAutoFocus();
+    // Blur function to remove focus
+    function blurTextArea() {
+        console.log('blurTextArea függvény meghívva');
+        const voiceflowChatElement = document.getElementById('voiceflow-chat');
+        if (voiceflowChatElement) {
+            console.log('Voiceflow chat elem megtalálva');
+            try {
+                const shadowRoot = voiceflowChatElement.shadowRoot;
+                const textAreaElement = shadowRoot.querySelector('textarea');
+                if (textAreaElement) {
+                    textAreaElement.blur(); // Eltávolítjuk a fókuszt
+                    console.log('Fókusz eltávolítva a textarea-ról');
+                } else {
+                    console.log('Textarea nem található a shadow DOM-ban');
+                }
+            } catch (error) {
+                console.error('Hiba a shadow DOM-ban való keresés közben:', error);
+            }
+        } else {
+            console.log('Voiceflow chat elem nem található');
+        }
+    }
 
 })(document, 'script');
 </script>
