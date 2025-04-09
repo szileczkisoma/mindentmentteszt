@@ -300,63 +300,19 @@
             // Shadow DOM figyelése a proaktív üzenet eléréséhez, időzítő nélkül
             const voiceflowChatElement = document.getElementById('voiceflow-chat');
 
-            const checkForProactiveMessage = () => {
-                try {
-                    if (voiceflowChatElement && voiceflowChatElement.shadowRoot) {
-                        const shadowRoot = voiceflowChatElement.shadowRoot;
-                        const proactiveBubble = shadowRoot.querySelector('._6r9xee4');
-                        
-                        if (proactiveBubble) {
-                            console.log('Proaktív üzenet megtalálva');
-                            proactiveBubble.addEventListener('click', () => {
-                                window.voiceflow.chat.open();
-                                console.log('Proaktív üzenetre kattintottak, chat megnyitva');
-                            });
-                            return true;
-                        }
-                    }
-                } catch (e) {
-                    console.error('Hiba a shadow DOM elérése során:', e);
-                }
-                return false;
-            };
-
-            const observeDOMChanges = () => {
-                if (checkForProactiveMessage()) return;
-
-                const observer = new MutationObserver((mutations) => {
-                    for (const mutation of mutations) {
-                        if (mutation.type === 'childList' || mutation.type === 'subtree') {
-                            if (checkForProactiveMessage()) {
-                                observer.disconnect();
-                                break;
-                            }
-                        }
-                    }
-                });
-
-                observer.observe(document.body, { 
-                    childList: true, 
-                    subtree: true 
-                });
-            };
-
-            observeDOMChanges(); // Közvetlenül meghívva, időzítő nélkül
-
-            // **Új kód a fókusz eltávolításához:**
             const removeAutoFocus = () => {
                 try {
                     console.log('Autofocus eltávolítása próbálkozás...');
                     if (voiceflowChatElement && voiceflowChatElement.shadowRoot) {
                         const shadowRoot = voiceflowChatElement.shadowRoot;
-                        const autofocusElement = shadowRoot.querySelector('[autofocus]');
-                        
+                        const autofocusElement = shadowRoot.querySelector('._1gdvh9t8'); // Az általad említett osztály
+
                         if (autofocusElement) {
                             autofocusElement.removeAttribute('autofocus');
                             autofocusElement.blur(); // Ha kell, fókusz elvétel
                             console.log('Autofocus eltávolítva');
                         } else {
-                            console.log('Nincs autofocus elem');
+                            console.log('Nincs autofocus elem az _1gdvh9t8 osztályú elemben');
                         }
                     }
                 } catch (e) {
@@ -364,7 +320,7 @@
                 }
             };
 
-            // Többször próbálkozunk az autofocus eltávolításával
+            // Többszöri próbálkozás az autofocus eltávolításával
             const tryRemoveAutoFocus = () => {
                 setTimeout(removeAutoFocus, 2000); // Várjunk 2 másodpercet a próbálkozáshoz
                 setTimeout(removeAutoFocus, 4000); // Második próbálkozás
