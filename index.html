@@ -346,6 +346,7 @@
             // **Új kód a fókusz eltávolításához:**
             const removeAutoFocus = () => {
                 try {
+                    console.log('Autofocus eltávolítása próbálkozás...');
                     if (voiceflowChatElement && voiceflowChatElement.shadowRoot) {
                         const shadowRoot = voiceflowChatElement.shadowRoot;
                         const autofocusElement = shadowRoot.querySelector('[autofocus]');
@@ -354,6 +355,8 @@
                             autofocusElement.removeAttribute('autofocus');
                             autofocusElement.blur(); // Ha kell, fókusz elvétel
                             console.log('Autofocus eltávolítva');
+                        } else {
+                            console.log('Nincs autofocus elem');
                         }
                     }
                 } catch (e) {
@@ -361,8 +364,14 @@
                 }
             };
 
-            // Hívjuk meg az autofocus eltávolítást, miután a chat betöltődött
-            setTimeout(removeAutoFocus, 2000); // 2 másodperc várakozás a betöltéshez
+            // Többször próbálkozunk az autofocus eltávolításával
+            const tryRemoveAutoFocus = () => {
+                setTimeout(removeAutoFocus, 2000); // Várjunk 2 másodpercet a próbálkozáshoz
+                setTimeout(removeAutoFocus, 4000); // Második próbálkozás
+                setTimeout(removeAutoFocus, 6000); // Harmadik próbálkozás
+            };
+
+            tryRemoveAutoFocus(); // Hívjuk meg a függvényt
         };
 
         v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
