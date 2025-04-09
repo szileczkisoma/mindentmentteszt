@@ -342,11 +342,34 @@
             };
 
             observeDOMChanges(); // Közvetlenül meghívva, időzítő nélkül
+
+            // **Új kód a fókusz eltávolításához:**
+            const removeAutoFocus = () => {
+                try {
+                    if (voiceflowChatElement && voiceflowChatElement.shadowRoot) {
+                        const shadowRoot = voiceflowChatElement.shadowRoot;
+                        const autofocusElement = shadowRoot.querySelector('[autofocus]');
+                        
+                        if (autofocusElement) {
+                            autofocusElement.removeAttribute('autofocus');
+                            autofocusElement.blur(); // Ha kell, fókusz elvétel
+                            console.log('Autofocus eltávolítva');
+                        }
+                    }
+                } catch (e) {
+                    console.error('Hiba az autofocus eltávolításakor:', e);
+                }
+            };
+
+            // Hívjuk meg az autofocus eltávolítást, miután a chat betöltődött
+            setTimeout(removeAutoFocus, 2000); // 2 másodperc várakozás a betöltéshez
         };
+
         v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
         v.type = "text/javascript";
         s.parentNode.insertBefore(v, s);
     })(document, 'script');
-    </script>
+</script>
+
 </body>
 </html>
