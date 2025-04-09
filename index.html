@@ -209,7 +209,7 @@
     </script>
 
     <!-- Voiceflow script, fogköves üzenet csak főoldalon -->
-    <script type="text/javascript">
+   <script type="text/javascript">
 (function(d, t) {
     let isChatOpen = false; // Globális scope-ban
 
@@ -239,7 +239,7 @@
                     isChatOpen = true; // Chat megnyílt
                     console.log('Chat window opened');
                     // Biztosítjuk, hogy csak most történjen meg az autofocus eltávolítása
-                    removeAutoFocus(); // Fél másodperc várakozás
+                    removeAutoFocus(); // A chat megnyitásakor is
                 } else if (data.type === 'voiceflow:close') {
                     isChatOpen = false; // Chat bezárult
                     console.log('Chat window closed');
@@ -373,6 +373,10 @@
             console.log('Voiceflow chat elem nem található');
         }
     }
+
+    // Indításkor is próbálkozzunk eltávolítani az autofocus-t, ha már betöltődött
+    removeAutoFocus();
+
 })(document, 'script');
 </script>
 
