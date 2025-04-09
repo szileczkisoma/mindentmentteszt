@@ -88,12 +88,16 @@
   box-shadow: 0;
   display: block;
   overflow: visible;
+  position: relative;
+  top: 10px;
 }
 
 .vfrc-assistant-info--description {
   font-weight: bold;
   color: rgb(72, 174, 225);
   font-size: 18px;
+  position: relative;
+  top: 10px;
 }
 
 .vfrc-system-response--actions .o231sh1:first-child .vfrc-button {
