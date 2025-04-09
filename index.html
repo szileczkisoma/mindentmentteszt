@@ -298,9 +298,9 @@
             }, 10000); // 10 másodperc
 
             // Shadow DOM figyelése a proaktív üzenet eléréséhez, időzítő nélkül
-            const voiceflowChatElement = document.getElementById('voiceflow-chat');
+            //const voiceflowChatElement = document.getElementById('voiceflow-chat');
 
-            const removeAutoFocus = () => {
+            /*const removeAutoFocus = () => {
                 try {
                     console.log('Autofocus eltávolítása próbálkozás...');
                     if (voiceflowChatElement && voiceflowChatElement.shadowRoot) {
@@ -318,16 +318,16 @@
                 } catch (e) {
                     console.error('Hiba az autofocus eltávolításakor:', e);
                 }
-            };
+            };*/
 
             // Többszöri próbálkozás az autofocus eltávolításával
-            const tryRemoveAutoFocus = () => {
+            /*const tryRemoveAutoFocus = () => {
                 setTimeout(removeAutoFocus, 2000); // Várjunk 2 másodpercet a próbálkozáshoz
                 setTimeout(removeAutoFocus, 4000); // Második próbálkozás
                 setTimeout(removeAutoFocus, 6000); // Harmadik próbálkozás
-            };
+            };*/
 
-            tryRemoveAutoFocus(); // Hívjuk meg a függvényt
+            //tryRemoveAutoFocus(); // Hívjuk meg a függvényt
         };
 
         v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
