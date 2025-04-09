@@ -28,6 +28,18 @@
   overflow: visible;
   position: relative;
 }
+  .vfrc-assistant-info .vfrc-avatar {
+  height: 130px;
+  width: 220px;
+  box-shadow: 0;
+  display: block;
+  overflow: visible;
+  position: relative;
+  top: 40px;
+}
+  .vfrc-assistant-info--description {
+    display: none;
+}
 }
 
 .vfrc-header {
