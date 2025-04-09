@@ -63,54 +63,188 @@
     </script>
 
     <!-- DateExtension script -->
-    <script type="text/javascript">
-(function(d, t) {
-    let isChatOpen = false; // Globális scope-ban
-
-    var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
-    v.onload = function() {
-        console.log('Voiceflow script betöltve');
-
-        if (!window.voiceflow || !window.voiceflow.chat) {
-            console.error('Hiba: A Voiceflow objektum nem érhető el.');
-            return;
-        }
-
-        window.voiceflow.chat.load({
-            verify: { projectID: '67eb9441e65fd8cb380c11fc' },
-            url: 'https://general-runtime.voiceflow.com',
-            assistant: {
-                extensions: [DateExtension], // Ellenőrizd, hogy DateExtension definiálva van-e!
-                stylesheet: "https://szileczkisoma.github.io/mindentmentteszt/style.css"
+    <script>
+        const DateExtension = {
+            name: 'Date',
+            type: 'response',
+            match: ({ trace }) => {
+                const isMatch = trace.type === 'ext_date' || (trace.payload && trace.payload.name === 'ext_date');
+                console.log('Match called with trace:', trace, 'Result:', isMatch);
+                return isMatch;
             },
-            versionID: 'production',
-            voice: {
-                url: "https://runtime-api.voiceflow.com"
-            }
-        }).then(() => {
-            console.log('Voiceflow chat sikeresen betöltve');
+            render: ({ trace, element }) => {
+                if (!element) {
+                    console.error('Element not provided to DateExtension');
+                    return;
+                }
 
-            // Betöltéskor meghívjuk mindkettőt
+                const formContainer = document.createElement('div');
+                formContainer.style.position = 'relative';
+
+                let currentDate = new Date();
+                let minDate = new Date();
+                let maxDate = new Date();
+                maxDate.setMonth(currentDate.getMonth() + 6);
+
+                let minDateString = minDate.toISOString().slice(0, 10);
+                let maxDateString = maxDate.toISOString().slice(0, 10);
+
+                formContainer.innerHTML = `
+                    <style>
+                        .date-select-container {
+                            position: relative;
+                            width: 100%;
+                        }
+                        .date-select-btn {
+                            background: linear-gradient(to right, #d3d3d3, #e0e0e0);
+                            border: none;
+                            color: #333;
+                            padding: 10px;
+                            border-radius: 5px;
+                            width: 100%;
+                            cursor: pointer;
+                            font: normal 14px sans-serif;
+                            text-align: center;
+                        }
+                        .date-select-btn:hover {
+                            opacity: 0.9;
+                        }
+                        .submit-button {
+                            background: #48AEE1;
+                            border: none;
+                            color: white;
+                            padding: 10px;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font: normal 14px sans-serif;
+                            width: 100%;
+                            margin-top: 10px;
+                            text-align: center;
+                            transition: opacity 0.3s;
+                        }
+                        .submit-button.submitted {
+                            opacity: 0.5;
+                            cursor: not-allowed;
+                        }
+                        .date-input {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            opacity: 0;
+                            pointer-events: none;
+                        }
+                        .date-input::-webkit-calendar-picker-indicator {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            width: 100%;
+                            height: 100%;
+                            cursor: pointer;
+                        }
+                    </style>
+                    <div class="date-select-container">
+                        <button class="date-select-btn">Dátum kiválasztása</button>
+                        <input type="date" class="date-input" min="${minDateString}" max="${maxDateString}" />
+                    </div>
+                `;
+
+                const dateSelectBtn = formContainer.querySelector('.date-select-btn');
+                const dateInput = formContainer.querySelector('.date-input');
+                let submitButton = null;
+
+                dateSelectBtn.addEventListener('click', () => {
+                    dateInput.style.pointerEvents = 'auto';
+                    try {
+                        dateInput.showPicker();
+                    } catch (e) {
+                        console.log("A showPicker nem támogatott:", e);
+                        dateInput.focus();
+                    }
+                });
+
+                dateInput.addEventListener('change', function () {
+                    const selectedDate = this.value;
+                    if (selectedDate) {
+                        dateSelectBtn.textContent = selectedDate;
+                        this.style.pointerEvents = 'none';
+
+                        if (!submitButton) {
+                            submitButton = document.createElement('button');
+                            submitButton.className = 'submit-button';
+                            submitButton.textContent = 'Küldés';
+                            formContainer.appendChild(submitButton);
+
+                            submitButton.addEventListener('click', () => {
+                                const currentDate = dateInput.value;
+                                submitButton.textContent = 'Elküldve';
+                                submitButton.classList.add('submitted');
+                                submitButton.disabled = true;
+
+                                console.log('Sending to Voiceflow:', { date: currentDate });
+                                window.voiceflow.chat.interact({
+                                    type: 'complete',
+                                    payload: { date: currentDate },
+                                });
+                            });
+                        }
+                    }
+                });
+
+                formContainer.addEventListener('click', (event) => {
+                    if (!formContainer.contains(event.target)) {
+                        dateInput.style.pointerEvents = 'none';
+                    }
+                });
+
+                setTimeout(() => {
+                    element.appendChild(formContainer);
+                    console.log('DateExtension rendered successfully');
+                }, 100);
+            },
+        };
+    </script>
+
+    <!-- Voiceflow script, az előző üzenetből átvéve -->
+    <script type="text/javascript">
+    (function(d, t) {
+        let isChatOpen = false; // Globális scope-ban
+
+        var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+        v.onload = function() {
+            console.log('Voiceflow script betöltve');
+            window.voiceflow.chat.load({
+                verify: { projectID: '67eb9441e65fd8cb380c11fc' },
+                url: 'https://general-runtime.voiceflow.com',
+                assistant: {
+                    extensions: [DateExtension],
+                    stylesheet: "https://szileczkisoma.github.io/mindentmentteszt/style.css"
+                },
+                versionID: 'production',
+                voice: {
+                    url: "https://runtime-api.voiceflow.com"
+                }
+            });
+
+            // Betöltéskor meghívjuk a függvényeket
             removeAutoFocus();
             blurTextArea();
 
             // Chat állapotának figyelése
             window.addEventListener('message', (event) => {
-                console.log('Üzenet érkezett a Voiceflow-tól:', event.data);
                 if (event.data && typeof event.data === 'string') {
-                    try {
-                        const data = JSON.parse(event.data);
-                        if (data.type === 'voiceflow:open') {
-                            isChatOpen = true;
-                            console.log('Chat window opened');
-                            removeAutoFocus(); // Eseménykor is meghívjuk
-                            blurTextArea();    // Eseménykor is meghívjuk
-                        } else if (data.type === 'voiceflow:close') {
-                            isChatOpen = false;
-                            console.log('Chat window closed');
-                        }
-                    } catch (e) {
-                        console.error('Hiba az üzenet feldolgozásakor:', e);
+                    const data = JSON.parse(event.data);
+                    if (data.type === 'voiceflow:open') {
+                        isChatOpen = true; // Chat megnyílt
+                        console.log('Chat window opened');
+                        removeAutoFocus(); // Chat megnyitásakor is meghívjuk
+                        blurTextArea();    // Chat megnyitásakor is meghívjuk
+                    } else if (data.type === 'voiceflow:close') {
+                        isChatOpen = false; // Chat bezárult
+                        console.log('Chat window closed');
                     }
                 }
             }, false);
@@ -120,11 +254,12 @@
                 if (window.location.hash === '#fooldal' || window.location.hash === '') {
                     console.log('Első proaktív üzenet küldése a főoldalon...');
                     window.voiceflow.chat.proactive.clear();
-                    window.voiceflow.chat.proactive.push({
-                        type: 'text',
+                    window.voiceflow.chat.proactive.push({ 
+                        type: 'text', 
                         payload: { message: 'Kell fogász?' }
                     });
 
+                    // Esemény triggerelése, ha a chat nincs megnyitva
                     if (!isChatOpen) {
                         console.log('Fogkő-eltávolítás esemény triggerelve');
                         window.voiceflow.chat.interact({
@@ -139,18 +274,19 @@
                         console.log('Chat nyitva van, fogko_eltavolitas esemény nem triggerelve');
                     }
                 }
-            }, 10000);
+            }, 10000); // 10 másodperc
 
             // Második proaktív üzenet: csak az Implantátumok oldalon 10 másodperc után
             setTimeout(function() {
                 if (window.location.hash === '#implantatumok') {
                     console.log('Második proaktív üzenet küldése az Implantátumok oldalon...');
                     window.voiceflow.chat.proactive.clear();
-                    window.voiceflow.chat.proactive.push({
-                        type: 'text',
+                    window.voiceflow.chat.proactive.push({ 
+                        type: 'text', 
                         payload: { message: 'Érdekel egy AlphaBio MultiNeo implantátum?' }
                     });
 
+                    // Esemény triggerelése, ha a chat nincs megnyitva
                     if (!isChatOpen) {
                         console.log('AlphaBio MultiNeo esemény triggerelve');
                         window.voiceflow.chat.interact({
@@ -165,106 +301,104 @@
                         console.log('Chat nyitva van, alphabio_multineo_implantatum esemény nem triggerelve');
                     }
                 }
-            }, 10000);
+            }, 10000); // 10 másodperc
 
-            // Shadow DOM figyelése
-            observeDOMChanges();
-        }).catch(err => {
-            console.error('Hiba a Voiceflow betöltésekor:', err);
-        });
-    };
+            // Shadow DOM figyelése a proaktív üzenet eléréséhez, időzítő nélkül
+            const voiceflowChatElement = document.getElementById('voiceflow-chat');
 
-    v.onerror = function() {
-        console.error('Hiba a Voiceflow script betöltésekor:', v.src);
-    };
-    v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
-    v.type = "text/javascript";
-    s.parentNode.insertBefore(v, s);
-
-    // Remove autofocus function
-    function removeAutoFocus() {
-        console.log('removeAutoFocus függvény meghívva');
-        const voiceflowChatElement = document.getElementById('voiceflow-chat');
-        if (voiceflowChatElement) {
-            console.log('Voiceflow chat elem megtalálva');
-            try {
-                const shadowRoot = voiceflowChatElement.shadowRoot;
-                const textAreaElement = shadowRoot.querySelector('textarea');
-                if (textAreaElement && textAreaElement.hasAttribute('autofocus')) {
-                    console.log('Autofocus megtalálva a textarea-n, eltávolítom');
-                    textAreaElement.removeAttribute('autofocus');
-                } else {
-                    console.log('Autofocus nem található a textarea-n');
-                }
-            } catch (error) {
-                console.error('Hiba a shadow DOM-ban való keresés közben:', error);
-            }
-        } else {
-            console.log('Voiceflow chat elem nem található');
-        }
-    }
-
-    // Blur function to remove focus
-    function blurTextArea() {
-        console.log('blurTextArea függvény meghívva');
-        const voiceflowChatElement = document.getElementById('voiceflow-chat');
-        if (voiceflowChatElement) {
-            console.log('Voiceflow chat elem megtalálva');
-            try {
-                const shadowRoot = voiceflowChatElement.shadowRoot;
-                const textAreaElement = shadowRoot.querySelector('textarea');
-                if (textAreaElement) {
-                    textAreaElement.blur();
-                    console.log('Fókusz eltávolítva a textarea-ról');
-                } else {
-                    console.log('Textarea nem található a shadow DOM-ban');
-                }
-            } catch (error) {
-                console.error('Hiba a shadow DOM-ban való keresés közben:', error);
-            }
-        } else {
-            console.log('Voiceflow chat elem nem található');
-        }
-    }
-
-    // Shadow DOM figyelése a proaktív üzenet eléréséhez
-    const observeDOMChanges = () => {
-        const voiceflowChatElement = document.getElementById('voiceflow-chat');
-        const checkForProactiveMessage = () => {
-            try {
-                if (voiceflowChatElement && voiceflowChatElement.shadowRoot) {
-                    const shadowRoot = voiceflowChatElement.shadowRoot;
-                    const proactiveBubble = shadowRoot.querySelector('._6r9xee4');
-                    if (proactiveBubble) {
-                        console.log('Proaktív üzenet megtalálva');
-                        proactiveBubble.addEventListener('click', () => {
-                            window.voiceflow.chat.open();
-                            console.log('Proaktív üzenetre kattintottak, chat megnyitva');
-                        });
-                        return true;
+            const checkForProactiveMessage = () => {
+                try {
+                    if (voiceflowChatElement && voiceflowChatElement.shadowRoot) {
+                        const shadowRoot = voiceflowChatElement.shadowRoot;
+                        const proactiveBubble = shadowRoot.querySelector('._6r9xee4');
+                        
+                        if (proactiveBubble) {
+                            console.log('Proaktív üzenet megtalálva');
+                            proactiveBubble.addEventListener('click', () => {
+                                window.voiceflow.chat.open();
+                                console.log('Proaktív üzenetre kattintottak, chat megnyitva');
+                            });
+                            return true;
+                        }
                     }
+                } catch (e) {
+                    console.error('Hiba a shadow DOM elérése során:', e);
                 }
-            } catch (e) {
-                console.error('Hiba a shadow DOM elérése során:', e);
-            }
-            return false;
+                return false;
+            };
+
+            const observeDOMChanges = () => {
+                if (checkForProactiveMessage()) return;
+
+                const observer = new MutationObserver((mutations) => {
+                    for (const mutation of mutations) {
+                        if (mutation.type === 'childList' || mutation.type === 'subtree') {
+                            if (checkForProactiveMessage()) {
+                                observer.disconnect();
+                                break;
+                            }
+                        }
+                    }
+                });
+
+                observer.observe(document.body, { 
+                    childList: true, 
+                    subtree: true 
+                });
+            };
+
+            observeDOMChanges(); // Közvetlenül meghívva, időzítő nélkül
         };
+        v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
+        v.type = "text/javascript";
+        s.parentNode.insertBefore(v, s);
 
-        if (checkForProactiveMessage()) return;
-
-        const observer = new MutationObserver((mutations) => {
-            if (checkForProactiveMessage()) {
-                observer.disconnect();
+        // Remove autofocus function
+        function removeAutoFocus() {
+            console.log('removeAutoFocus függvény meghívva');
+            const voiceflowChatElement = document.getElementById('voiceflow-chat');
+            if (voiceflowChatElement) {
+                console.log('Voiceflow chat elem megtalálva');
+                try {
+                    const shadowRoot = voiceflowChatElement.shadowRoot;
+                    const textAreaElement = shadowRoot.querySelector('textarea');
+                    if (textAreaElement && textAreaElement.hasAttribute('autofocus')) {
+                        console.log('Autofocus megtalálva a textarea-n, eltávolítom');
+                        textAreaElement.removeAttribute('autofocus');
+                    } else {
+                        console.log('Autofocus nem található a textarea-n');
+                    }
+                } catch (error) {
+                    console.error('Hiba a shadow DOM-ban való keresés közben:', error);
+                }
+            } else {
+                console.log('Voiceflow chat elem nem található');
             }
-        });
+        }
 
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
-    };
-})(document, 'script');
-</script>
-
+        // Blur function to remove focus
+        function blurTextArea() {
+            console.log('blurTextArea függvény meghívva');
+            const voiceflowChatElement = document.getElementById('voiceflow-chat');
+            if (voiceflowChatElement) {
+                console.log('Voiceflow chat elem megtalálva');
+                try {
+                    const shadowRoot = voiceflowChatElement.shadowRoot;
+                    const textAreaElement = shadowRoot.querySelector('textarea');
+                    if (textAreaElement) {
+                        textAreaElement.blur();
+                        console.log('Fókusz eltávolítva a textarea-ról');
+                    } else {
+                        console.log('Textarea nem található a shadow DOM-ban');
+                    }
+                } catch (error) {
+                    console.error('Hiba a shadow DOM-ban való keresés közben:', error);
+                }
+            } else {
+                console.log('Voiceflow chat elem nem található');
+            }
+        }
+    })(document, 'script');
+    </script>
 </body>
 </html>
