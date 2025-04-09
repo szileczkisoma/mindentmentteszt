@@ -90,6 +90,10 @@
         }).then(() => {
             console.log('Voiceflow chat sikeresen betöltve');
 
+            // Betöltéskor meghívjuk mindkettőt
+            removeAutoFocus();
+            blurTextArea();
+
             // Chat állapotának figyelése
             window.addEventListener('message', (event) => {
                 console.log('Üzenet érkezett a Voiceflow-tól:', event.data);
@@ -99,8 +103,8 @@
                         if (data.type === 'voiceflow:open') {
                             isChatOpen = true;
                             console.log('Chat window opened');
-                            removeAutoFocus();
-                            blurTextArea();
+                            removeAutoFocus(); // Eseménykor is meghívjuk
+                            blurTextArea();    // Eseménykor is meghívjuk
                         } else if (data.type === 'voiceflow:close') {
                             isChatOpen = false;
                             console.log('Chat window closed');
@@ -165,7 +169,6 @@
 
             // Shadow DOM figyelése
             observeDOMChanges();
-            blurTextArea(); // Betöltéskor futtatjuk
         }).catch(err => {
             console.error('Hiba a Voiceflow betöltésekor:', err);
         });
