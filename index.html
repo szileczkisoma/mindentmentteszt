@@ -239,7 +239,7 @@
                     isChatOpen = true; // Chat megnyílt
                     console.log('Chat window opened');
                     // Biztosítjuk, hogy csak most történjen meg az autofocus eltávolítása
-                    setTimeout(removeAutoFocus, 500); // Fél másodperc várakozás
+                    removeAutoFocus(); // Fél másodperc várakozás
                 } else if (data.type === 'voiceflow:close') {
                     isChatOpen = false; // Chat bezárult
                     console.log('Chat window closed');
