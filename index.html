@@ -208,7 +208,7 @@
         };
     </script>
 
-    <!-- Voiceflow script, az előző üzenetből átvéve -->
+    <!-- Voiceflow script, az új kóddal frissítve -->
     <script type="text/javascript">
     (function(d, t) {
         let isChatOpen = false; // Globális scope-ban
@@ -228,7 +228,6 @@
                     url: "https://runtime-api.voiceflow.com"
                 }
             });
-
 
             // Chat állapotának figyelése
             window.addEventListener('message', (event) => {
@@ -299,30 +298,46 @@
                 }
             }, 10000); // 10 másodperc
 
-            // Shadow DOM figyelése a proaktív üzenet eléréséhez, időzítő nélkül
+            // Shadow DOM figyelése a proaktív üzenet eléréséhez
             const voiceflowChatElement = document.getElementById('voiceflow-chat');
 
             const checkForProactiveMessage = () => {
                 try {
                     if (voiceflowChatElement && voiceflowChatElement.shadowRoot) {
                         const shadowRoot = voiceflowChatElement.shadowRoot;
-                        const proactiveBubble = shadowRoot.querySelector('._6r9xee4');
-                        
-                        if (proactiveBubble) {
-                            console.log('Proaktív üzenet megtalálva');
-                            proactiveBubble.addEventListener('click', () => {
-                                window.voiceflow.chat.open();
-                                console.log('Proaktív üzenetre kattintottak, chat megnyitva');
-                            });
-                            return true;
-                        }
+
+                        const observer = new MutationObserver((mutationsList, observer) => {
+                            for (const mutation of mutationsList) {
+                                const proactiveBubble = Array.from(shadowRoot.querySelectorAll('[class]'))
+                                    .find(element => Array.from(element.classList).some(className => className.startsWith('_6r9xee')));
+
+                                if (proactiveBubble) {
+                                    // Proaktív üzenet megtalálva
+                                    //console.log('Proaktív üzenet megtalálva:', proactiveBubble);
+
+                                    proactiveBubble.addEventListener('click', () => {
+                                        window.voiceflow.chat.open();
+                                        //console.log('Proaktív üzenetre kattintottak, chat megnyitva');
+                                    });
+
+                                    // Az observer leállítása, ha már megtaláltuk az elemet
+                                    observer.disconnect();
+                                    break;
+                                }
+                            }
+                        });
+
+                        observer.observe(shadowRoot, { childList: true, subtree: true });
                     }
                 } catch (e) {
                     console.error('Hiba a shadow DOM elérése során:', e);
                 }
-                return false;
             };
 
+            // A dinamikus figyelés elindítása
+            checkForProactiveMessage();
+
+            // Megfigyelés indítása
             const observeDOMChanges = () => {
                 if (checkForProactiveMessage()) return;
 
@@ -341,36 +356,20 @@
                     childList: true, 
                     subtree: true 
                 });
+
+                // Időszakos ellenőrzés
+                const intervalId = setInterval(() => {
+                    if (checkForPro 인터లుactiveMessage()) {
+                        clearInterval(intervalId);
+                    }
+                }, 1000);
             };
 
-            observeDOMChanges(); // Közvetlenül meghívva, időzítő nélkül
+            setTimeout(observeDOMChanges, 1000);
         };
         v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
         v.type = "text/javascript";
         s.parentNode.insertBefore(v, s);
-
-        // Remove autofocus function
-        /*function removeAutoFocus() {
-            console.log('removeAutoFocus függvény meghívva');
-            const voiceflowChatElement = document.getElementById('voiceflow-chat');
-            if (voiceflowChatElement) {
-                console.log('Voiceflow chat elem megtalálva');
-                try {
-                    const shadowRoot = voiceflowChatElement.shadowRoot;
-                    const textAreaElement = shadowRoot.querySelector('textarea');
-                    if (textAreaElement && textAreaElement.hasAttribute('autofocus')) {
-                        console.log('Autofocus megtalálva a textarea-n, eltávolítom');
-                        textAreaElement.removeAttribute('autofocus');
-                    } else {
-                        console.log('Autofocus nem található a textarea-n');
-                    }
-                } catch (error) {
-                    console.error('Hiba a shadow DOM-ban való keresés közben:', error);
-                }
-            } else {
-                console.log('Voiceflow chat elem nem található');
-            }
-        }*/
 
         // Blur function to remove focus
         function blurTextArea() {
