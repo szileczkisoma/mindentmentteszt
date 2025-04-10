@@ -65,7 +65,7 @@
 }
 
 .vfrc-assistant-info .vfrc-avatar {
-  height: 140px;
+  height: 150px;
   width: 220px;
   box-shadow: 0;
   display: block;
@@ -178,11 +178,11 @@
 }
 
 ._11kfxpg0 {
-  font-size: 12px;
+  font-size: 13px;
 }
 
 ._15emaa41 {
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .g3dqfd6 {
@@ -225,8 +225,8 @@
   display: block;
 }
   .vfrc-assistant-info .vfrc-avatar {
-  height: 120px;
-  width: 200px;
+  height: 130px;
+  width: 210px;
   box-shadow: 0;
   display: block;
   overflow: visible !important;
@@ -244,11 +244,11 @@
   
 } 
   ._15emaa41 {
-  font-size: 14px;
+  font-size: 15px;
 }
 
   ._11kfxpg0 {
-  font-size: 14px;
+  font-size: 15px;
 }
   .vfrc-assistant-info { 
     width: 100%;
@@ -259,7 +259,7 @@
   .vfrc-assistant-info .vfrc-avatar {
     -webkit-transform: translateZ(0); /* Hardware acceleration bekapcsolása */
     overflow: visible !important;
-    height: 130px;
+    height: 140px;
     width: 210px;
   }
 }
