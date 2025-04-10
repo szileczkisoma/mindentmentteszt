@@ -34,13 +34,17 @@
   width: 210px;
   box-shadow: 0;
   display: block;
-  overflow: visible;
+  overflow: visible !important;
   position: relative;
   top: 50px;
 }
   .vfrc-assistant-info--description {
     display: none;
 }
+
+.vfrc-header .vfrc-avatar {
+  overflow: visible !important
+} 
 }
 
 .vfrc-header {
