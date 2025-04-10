@@ -24,18 +24,19 @@
     height: calc(100% + 170px) !important; /* Az alapmagassághoz képest +170px telefonon */
   }
 
-  .jsli365 {
-  overflow: visible;
-  position: relative;
+  .jsli361 {
+  width: 255px;
+  margin: 0 auto;
+  display: block;
 }
   .vfrc-assistant-info .vfrc-avatar {
-  height: 130px;
-  width: 220px;
+  height: 120px;
+  width: 210px;
   box-shadow: 0;
   display: block;
   overflow: visible;
   position: relative;
-  top: 40px;
+  top: 50px;
 }
   .vfrc-assistant-info--description {
     display: none;
@@ -192,13 +193,9 @@
 }
 
 .jsli361 {
-  justify-content: left;
-}
-
-.jsli365 {
-  overflow: visible;
-  position: relative;
-  left: 55px;
+  width: 255px;
+  margin: 0 auto;
+  display: block;
 }
   
 .jyiuei3 {
