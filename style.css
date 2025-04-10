@@ -8,50 +8,7 @@
   position: absolute;
   bottom: -10px;
   right: 10px;
-}
-
-@media (max-width: 768px) {
-  .vfrc-chat {
-    width: 95vw;
-    height: 80vh;
-    bottom: 20px;
-    right: 5px;
-    font-size: 14px;
-    min-width: unset;
-  }
-  
-  .vfrc-proactive {
-    height: calc(100% + 170px) !important; /* Az alapmagassághoz képest +170px telefonon */
-  }
-
-  .jsli361 {
-  width: 255px;
-  margin: 0 auto;
-  display: block;
-}
-  .vfrc-assistant-info .vfrc-avatar {
-  height: 130px;
-  width: 210px;
-  box-shadow: 0;
-  display: block;
-  overflow: visible !important;
-  position: relative;
-  top: 50px;
-}
-  .vfrc-assistant-info--description {
-    display: none;
-}
-
-  .vfrc-header .vfrc-avatar {
-  overflow: visible !important
-} 
-  ._15emaa41 {
-  font-size: 14px;
-}
-
-  ._11kfxpg0 {
-  font-size: 14px;
-}
+  overflow: visible;
 }
 
 .vfrc-header {
@@ -242,4 +199,50 @@
 
 .vfrc-assistant-info {
   overflow: visible;
+}
+
+
+@media (max-width: 768px) {
+  .vfrc-chat {
+    width: 95vw;
+    height: 80vh;
+    bottom: 20px;
+    right: 5px;
+    font-size: 14px;
+    min-width: unset;
+    overflow: visible;
+  }
+  
+  .vfrc-proactive {
+    height: calc(100% + 170px) !important; /* Az alapmagassághoz képest +170px telefonon */
+  }
+
+  .jsli361 {
+  width: 255px;
+  margin: 0 auto;
+  display: block;
+}
+  .vfrc-assistant-info .vfrc-avatar {
+  height: 130px;
+  width: 210px;
+  box-shadow: 0;
+  display: block;
+  overflow: visible !important;
+  position: relative;
+  top: 50px;
+}
+  .vfrc-assistant-info--description {
+    display: none;
+}
+
+  .vfrc-header .vfrc-avatar {
+  overflow: visible !important
+} 
+  ._15emaa41 {
+  font-size: 14px;
+}
+
+  ._11kfxpg0 {
+  font-size: 14px;
+}
 }
