@@ -236,7 +236,10 @@
 }
 
   .vfrc-header .vfrc-avatar {
-  overflow: visible !important
+  overflow: visible !important;
+  height: 50px;
+  width: 110px;
+  
 } 
   ._15emaa41 {
   font-size: 14px;
