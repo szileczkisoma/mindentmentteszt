@@ -42,9 +42,16 @@
     display: none;
 }
 
-.vfrc-header .vfrc-avatar {
+  .vfrc-header .vfrc-avatar {
   overflow: visible !important
 } 
+  ._15emaa41 {
+  font-size: 14px;
+}
+
+  ._11kfxpg0 {
+  font-size: 14px;
+}
 }
 
 .vfrc-header {
@@ -216,7 +223,7 @@
 }
 
 ._15emaa41 {
-  fonz-size: 12px;
+  font-size: 12px;
 }
 
 .g3dqfd6 {
