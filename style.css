@@ -59,9 +59,9 @@
   /*border: 1px solid rgb(72, 174, 225);*/
   display: block;
   overflow: hidden;
-  padding-left: 3px;
+  /*padding-left: 3px;
   padding-right: 3px;
-  padding-top: 3px;
+  padding-top: 3px;*/
 }
 
 .vfrc-assistant-info .vfrc-avatar {
