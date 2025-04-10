@@ -229,9 +229,6 @@
                 }
             });
 
-            // Betöltéskor meghívjuk a függvényeket
-            //removeAutoFocus();
-            //blurTextArea();
 
             // Chat állapotának figyelése
             window.addEventListener('message', (event) => {
@@ -240,7 +237,6 @@
                     if (data.type === 'voiceflow:open') {
                         isChatOpen = true; // Chat megnyílt
                         console.log('Chat window opened');
-                        //removeAutoFocus(); // Chat megnyitásakor is meghívjuk
                         blurTextArea();    // Chat megnyitásakor is meghívjuk
                     } else if (data.type === 'voiceflow:close') {
                         isChatOpen = false; // Chat bezárult
