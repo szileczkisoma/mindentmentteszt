@@ -208,7 +208,7 @@
         };
     </script>
 
-    <!-- Voiceflow script, az új kóddal frissítve -->
+    <!-- Voiceflow script, javított verzió -->
     <script type="text/javascript">
     (function(d, t) {
         let isChatOpen = false; // Globális scope-ban
@@ -254,7 +254,6 @@
                         payload: { message: 'Kell fogász?' }
                     });
 
-                    // Esemény triggerelése, ha a chat nincs megnyitva
                     if (!isChatOpen) {
                         console.log('Fogkő-eltávolítás esemény triggerelve');
                         window.voiceflow.chat.interact({
@@ -281,7 +280,6 @@
                         payload: { message: 'Érdekel egy AlphaBio MultiNeo implantátum?' }
                     });
 
-                    // Esemény triggerelése, ha a chat nincs megnyitva
                     if (!isChatOpen) {
                         console.log('AlphaBio MultiNeo esemény triggerelve');
                         window.voiceflow.chat.interact({
@@ -312,15 +310,12 @@
                                     .find(element => Array.from(element.classList).some(className => className.startsWith('_6r9xee')));
 
                                 if (proactiveBubble) {
-                                    // Proaktív üzenet megtalálva
-                                    //console.log('Proaktív üzenet megtalálva:', proactiveBubble);
-
+                                    console.log('Proaktív üzenet megtalálva:', proactiveBubble);
                                     proactiveBubble.addEventListener('click', () => {
                                         window.voiceflow.chat.open();
-                                        //console.log('Proaktív üzenetre kattintottak, chat megnyitva');
+                                        console.log('Proaktív üzenetre kattintottak, chat megnyitva');
                                     });
 
-                                    // Az observer leállítása, ha már megtaláltuk az elemet
                                     observer.disconnect();
                                     break;
                                 }
@@ -357,9 +352,8 @@
                     subtree: true 
                 });
 
-                // Időszakos ellenőrzés
                 const intervalId = setInterval(() => {
-                    if (checkForPro 인터లుactiveMessage()) {
+                    if (checkForProactiveMessage()) {
                         clearInterval(intervalId);
                     }
                 }, 1000);
@@ -371,7 +365,6 @@
         v.type = "text/javascript";
         s.parentNode.insertBefore(v, s);
 
-        // Blur function to remove focus
         function blurTextArea() {
             console.log('blurTextArea függvény meghívva');
             const voiceflowChatElement = document.getElementById('voiceflow-chat');
