@@ -32,6 +32,7 @@
   width: 120px;
   display: block !important;
   overflow: visible;
+  border-radius: 0%;
 }
 
 .vfrc-header .g931q10 {
@@ -71,6 +72,7 @@
   overflow: visible;
   position: relative;
   top: 20px;
+  border-radius: 0%;
 }
 
 .vfrc-assistant-info--description {
