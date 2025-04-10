@@ -53,7 +53,7 @@
   background-color: white !important;
   border-bottom: 3px solid rgb(72, 174, 225) !important;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .vfrc-header .vfrc-avatar-wrapper {
@@ -231,4 +231,8 @@
 ._1lbxmyd0 ._1q15b0b3 {
   color: #ffffff;
   background-color: #48AEE1;
+}
+
+.vfrc-assistant-info {
+  overflow: visible;
 }
