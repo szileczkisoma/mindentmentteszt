@@ -255,14 +255,3 @@
     transform: translate(-50%, -50%) !important;
   }
 } 
-  
-}
-
-@media only screen and (max-width: 768px) and (-webkit-min-device-pixel-ratio: 2) {
-  .vfrc-assistant-info .vfrc-avatar {
-    -webkit-transform: translateZ(0); /* Hardware acceleration bekapcsolása */
-    overflow: visible !important;
-    height: 140px;
-    width: 210px;
-  }
-}
