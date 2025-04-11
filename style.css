@@ -139,14 +139,7 @@
 }
 
 .vfrc-proactive .vfrc-button {
-  position: relative !important;
-}
-
-.vfrc-proactive .vfrc-button .vfrc-icon {
-  position: absolute !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
+  display: none;
 }
 
 .g931q10 {
@@ -250,6 +243,20 @@
   .vfrc-assistant-info { 
     width: 100%;
 }
+
+ .vfrc-proactive .vfrc-button {
+    display: block;
+    position: relative !important;
+  }
+
+  .vfrc-proactive .vfrc-button .vfrc-icon {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+} 
+  
 }
 
 @media only screen and (max-width: 768px) and (-webkit-min-device-pixel-ratio: 2) {
