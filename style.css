@@ -250,7 +250,7 @@
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
   }
-  .o231sh1 {
+  .vfrc-system-response--actions .o231sh1:first-child .vfrc-button {
     font-size: 16px;
   }
 } 
