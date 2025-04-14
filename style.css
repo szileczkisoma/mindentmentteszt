@@ -198,6 +198,10 @@
   overflow: visible;
 }
 
+._1gdvh9t8::placeholder {
+    font-size: 13px;
+ }
+
 @media (max-width: 768px) {
   .vfrc-chat {
     width: 95vw;
@@ -255,6 +259,10 @@
   }
 
   ._1q15b0b1 {
+    font-size: 16px;
+  }
+
+  ._1gdvh9t8::placeholder {
     font-size: 16px;
   }
 } 
