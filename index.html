@@ -27,6 +27,17 @@
         .page.active {
             display: block;
         }
+        /* Chat konténer stílusa */
+        #chat-container {
+            width: 600px;
+            height: 500px;
+            margin: 20px auto;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
         /* Popup stílusa */
         .popup-overlay {
             display: none;
@@ -66,6 +77,8 @@
     <div id="fooldal" class="page active">
         <h1>Teszt Oldal</h1>
         <p>Én vagyok a főoldal</p>
+        <!-- Voiceflow chat konténer -->
+        <div id="chat-container"></div>
     </div>
 
     <div id="kezelések" class="page">
@@ -119,12 +132,12 @@
 
         // Voiceflow üzenetek figyelése (Shadow DOM)
         function observeVoiceflowMessages() {
-            const chatContainer = document.querySelector('#voiceflow-chat');
+            const chatContainer = document.querySelector('#chat-container');
             if (chatContainer && chatContainer.shadowRoot) {
-                console.log('Voiceflow konténer és Shadow DOM megtalálva (#voiceflow-chat), figyelés indul');
+                console.log('Voiceflow konténer és Shadow DOM megtalálva (#chat-container), figyelés indul');
                 const shadowRoot = chatContainer.shadowRoot;
                 
-                // Üzeneteket tartalmazó elem keresése (általános selector)
+                // Üzeneteket tartalmazó elem keresése
                 const messageContainer = shadowRoot.querySelector('div, section, [class*="message"], [class*="chat"]') || shadowRoot;
                 if (messageContainer) {
                     console.log('Üzenet konténer megtalálva a Shadow DOM-ban');
@@ -134,7 +147,7 @@
                                 mutation.addedNodes.forEach((node) => {
                                     if (node.nodeType === Node.ELEMENT_NODE) {
                                         const text = node.innerText || node.textContent;
-                                        console.log('Új üzenet (Shadow DOM):', text); // Hibakeresés
+                                        console.log('Új üzenet (Shadow DOM):', text);
                                         if (text === 'Válasszon várost:') {
                                             inBookingFlow = true;
                                             clearTimeout(popupTimer);
@@ -182,7 +195,7 @@
                     observer.observe(shadowRoot, { childList: true, subtree: true });
                 }
             } else {
-                console.log('Voiceflow konténer vagy Shadow DOM nem található, újrapróbálkozás...');
+                console.log('Voiceflow konténer vagy Shadow DOM nem található (#chat-container), újrapróbálkozás...');
                 setTimeout(observeVoiceflowMessages, 500);
             }
         }
@@ -203,7 +216,7 @@
         startPopupTimer();
     </script>
 
-    <!-- DateExtension script (változatlan) -->
+    <!-- DateExtension script -->
     <script>
         const DateExtension = {
             name: 'Date',
@@ -349,29 +362,33 @@
         };
     </script>
 
-    <!-- Voiceflow script (változatlan) -->
+    <!-- Voiceflow embedded script -->
     <script type="text/javascript">
-    (function(d, t) {
-        var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
-        v.onload = function() {
-            console.log('Voiceflow script betöltve');
-            window.voiceflow.chat.load({
-                verify: { projectID: '67f36da0b0fcfccb2105e9a3' },
-                url: 'https://general-runtime.voiceflow.com',
-                assistant: {
-                    extensions: [DateExtension],
-                    stylesheet: "https://szileczkisoma.github.io/mindentmentteszt/style.css"
-                },
-                versionID: 'production',
-                voice: {
-                    url: "https://runtime-api.voiceflow.com"
-                }
-            });
-        };
-        v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
-        v.type = "text/javascript";
-        s.parentNode.insertBefore(v, s);
-    })(document, 'script');
+        (function(d, t) {
+            var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+            v.onload = function() {
+                console.log('Voiceflow script betöltve');
+                window.voiceflow.chat.load({
+                    verify: { projectID: '67f36da0b0fcfccb2105e9a3' },
+                    url: 'https://general-runtime.voiceflow.com',
+                    versionID: 'production',
+                    voice: {
+                        url: "https://runtime-api.voiceflow.com"
+                    },
+                    assistant: {
+                        extensions: [DateExtension],
+                        stylesheet: "https://szileczkisoma.github.io/mindentmentteszt/style.css"
+                    },
+                    render: {
+                        mode: 'embedded',
+                        target: document.getElementById('chat-container')
+                    }
+                });
+            };
+            v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
+            v.type = "text/javascript";
+            s.parentNode.insertBefore(v, s);
+        })(document, 'script');
     </script>
 </body>
 </html>
