@@ -7,11 +7,19 @@
 }
 
 .jyiuei7 {
+  background-color: #ffffff;
+}
+
+.jyiuei7:hover {
   background-color: #48AEE1;
 }
 
-._1t7e06e0:hover {
+._1t7e06e0 {
   color: #48AEE1;
+}
+
+._1t7e06e0:hover {
+  color: #ffffff;
 }
 
 .vfrc-header {
