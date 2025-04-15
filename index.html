@@ -119,42 +119,53 @@
 
         // Voiceflow üzenetek figyelése
         function observeVoiceflowMessages() {
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    if (mutation.addedNodes.length) {
-                        mutation.addedNodes.forEach((node) => {
-                            if (node.nodeType === Node.ELEMENT_NODE) {
-                                const text = node.innerText || node.textContent;
-                                if (text === 'Válasszon várost:') {
-                                    inBookingFlow = true;
-                                    clearTimeout(popupTimer);
-                                    popupTimer = null;
-                                    console.log('Időpontfoglalás flow elkezdődött');
-                                } else if (text === 'Lefoglaltam az időpontot, köszi.') {
-                                    inBookingFlow = false;
-                                    if (!popupShown) {
-                                        startPopupTimer();
-                                    }
-                                    console.log('Időpontfoglalás flow véget ért');
-                                }
-                            }
-                        });
-                    }
-                });
-            });
-
-            // Figyeljük a Voiceflow chat konténert
-            const chatContainer = document.querySelector('vf-runtime');
+            const chatContainer = document.querySelector('#voiceflow-chat');
             if (chatContainer) {
+                console.log('Voiceflow konténer megtalálva (#voiceflow-chat), figyelés indul');
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.addedNodes.length) {
+                            mutation.addedNodes.forEach((node) => {
+                                if (node.nodeType === Node.ELEMENT_NODE) {
+                                    const text = node.innerText || node.textContent;
+                                    console.log('Új üzenet:', text); // Hibakeresés
+                                    if (text === 'Válasszon várost:') {
+                                        inBookingFlow = true;
+                                        clearTimeout(popupTimer);
+                                        popupTimer = null;
+                                        console.log('Időpontfoglalás flow elkezdődött');
+                                    } else if (text === 'Lefoglaltam az időpontot, köszi.') {
+                                        inBookingFlow = false;
+                                        if (!popupShown) {
+                                            startPopupTimer();
+                                        }
+                                        console.log('Időpontfoglalás flow véget ért');
+                                    }
+                                }
+                            });
+                        }
+                    });
+                });
                 observer.observe(chatContainer, { childList: true, subtree: true });
             } else {
-                console.log('Voiceflow konténer még nem található, újrapróbálkozás...');
-                setTimeout(observeVoiceflowMessages, 1000);
+                console.log('Voiceflow konténer (#voiceflow-chat) még nem található, újrapróbálkozás...');
+                setTimeout(observeVoiceflowMessages, 500);
+            }
+        }
+
+        // Voiceflow betöltés figyelése
+        function waitForVoiceflow() {
+            if (window.voiceflow && window.voiceflow.chat) {
+                console.log('Voiceflow chat API betöltve');
+                observeVoiceflowMessages();
+            } else {
+                console.log('Voiceflow chat API még nem betöltve, várakozás...');
+                setTimeout(waitForVoiceflow, 500);
             }
         }
 
         // Indítsuk a figyelést és a popup időzítőt
-        observeVoiceflowMessages();
+        waitForVoiceflow();
         startPopupTimer();
     </script>
 
