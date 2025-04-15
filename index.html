@@ -32,12 +32,27 @@
             width: 1000px;
             max-width: 90%;
             height: 700px;
-            margin: 20px auto;
             background-color: #f9f9f9;
             border: 1px solid #ddd;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+        }
+        /* Flex konténer a kép és chat számára */
+        .chat-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            max-width: 1200px;
+            gap: 20px;
+        }
+        /* Kép stílusa */
+        .chat-image {
+            max-width: 300px;
+            height: 700px; /* Megegyezik a #chat-container magasságával */
+            object-fit: cover; /* Megőrzi a képarányt, kitölti a magasságot */
+            border-radius: 8px;
         }
     </style>
 </head>
@@ -51,8 +66,11 @@
     <div id="fooldal" class="page active">
         <h1>Teszt Oldal</h1>
         <p>Én vagyok a főoldal</p>
-        <!-- Voiceflow chat konténer -->
-        <div id="chat-container"></div>
+        <!-- Chat és kép konténer -->
+        <div class="chat-section">
+            <img src="https://www.mindentment.hu/fogaszat/uploads_opt/drbarat/dr-barat.png" alt="Dr. Barát" class="chat-image">
+            <div id="chat-container"></div>
+        </div>
     </div>
 
     <div id="kezelések" class="page">
@@ -65,15 +83,6 @@
         <p>Itt megismerheted implantátumainkat</p>
     </div>
 
-    <!-- Popup HTML kikommentelve -->
-    <!--
-    <div class="popup-overlay" id="registerPopup">
-        <div class="popup-content">
-            <p>Regisztrálj</p>
-        </div>
-    </div>
-    -->
-
     <script>
         // Oldalváltás logika
         function showPage(pageId) {
@@ -84,29 +93,6 @@
 
         const initialPageId = window.location.hash.slice(1) || 'fooldal';
         showPage(initialPageId);
-
-        // Popup vezérlés kikommentelve
-        /*
-        let inBookingFlow = false;
-        let popupTimer = null;
-        let popupShown = false;
-
-        function startPopupTimer() {
-            console.log('Popup időzítő elindult');
-            popupTimer = setTimeout(() => {
-                if (!inBookingFlow && !popupShown) {
-                    showPopup();
-                }
-            }, 15000);
-        }
-
-        function showPopup() {
-            const popup = document.getElementById('registerPopup');
-            popup.style.display = 'flex';
-            popupShown = true;
-            console.log('Popup megjelenik');
-        }
-        */
 
         // Voiceflow üzenetek figyelése (Shadow DOM)
         function observeVoiceflowMessages() {
@@ -126,7 +112,6 @@
                                     if (node.nodeType === Node.ELEMENT_NODE) {
                                         const text = node.innerText || node.textContent;
                                         console.log('Új üzenet (Shadow DOM):', text);
-                                        // Popup logika kikommentelve, de üzenet figyelés marad
                                         if (text === 'Válasszon várost:') {
                                             console.log('Időpontfoglalás flow elkezdődött');
                                         } else if (text === 'Lefoglaltam az időpontot, köszi.') {
