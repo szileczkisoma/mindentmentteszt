@@ -27,6 +27,33 @@
         .page.active {
             display: block;
         }
+        /* Popup stílusa */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Félátlátszó háttér */
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+            width: 80%;
+        }
+        .popup-content p {
+            color: black;
+            font-size: 18px;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -51,7 +78,15 @@
         <p>Itt megismerheted implantátumainkat</p>
     </div>
 
+    <!-- Popup HTML -->
+    <div class="popup-overlay" id="registerPopup">
+        <div class="popup-content">
+            <p>Regisztrálj</p>
+        </div>
+    </div>
+
     <script>
+        // Oldalváltás logika
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
@@ -60,9 +95,47 @@
 
         const initialPageId = window.location.hash.slice(1) || 'fooldal';
         showPage(initialPageId);
+
+        // Popup vezérlés
+        let disablePopup = false; // Alapból a popup engedélyezve van
+
+        function startPopupTimer() {
+            setTimeout(() => {
+                if (!disablePopup) {
+                    showPopup();
+                }
+            }, 15000); // 15 másodperc = 15000 ms
+        }
+
+        function showPopup() {
+            const popup = document.getElementById('registerPopup');
+            popup.style.display = 'flex'; // Megjelenítjük a popupot
+            console.log('Popup megjelenik');
+        }
+
+        // Voiceflow Custom Action események figyelése
+        window.addEventListener('message', (event) => {
+            // Ellenőrizzük, hogy Voiceflow üzenet-e
+            if (event.origin.includes('voiceflow.com') && event.data && event.data.type === 'action') {
+                const action = event.data;
+                // foglals_start esemény
+                if (action.action === 'foglals_start' || action.payload?.event === 'bookingFlowStart') {
+                    disablePopup = true; // Popup tiltása
+                    console.log('Időpontfoglalás flow elkezdődött, popup tiltva');
+                }
+                // foglalas_vege esemény
+                else if (action.action === 'foglalas_vege' || action.payload?.event === 'bookingFlowEnd') {
+                    disablePopup = false; // Popup engedélyezése
+                    console.log('Időpontfoglalás flow véget ért, popup engedélyezve');
+                }
+            }
+        });
+
+        // Indítsuk el a popup időzítőt az oldal betöltésekor
+        startPopupTimer();
     </script>
 
-    <!-- DateExtension script -->
+    <!-- DateExtension script (változatlanul) -->
     <script>
         const DateExtension = {
             name: 'Date',
@@ -208,16 +281,14 @@
         };
     </script>
 
-    <!-- Voiceflow script, javított verzió -->
+    <!-- Voiceflow script (változatlanul) -->
     <script type="text/javascript">
     (function(d, t) {
-        let isChatOpen = false; // Globális scope-ban
-
         var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
         v.onload = function() {
             console.log('Voiceflow script betöltve');
             window.voiceflow.chat.load({
-                verify: { projectID: '67eb9441e65fd8cb380c11fc' },
+                verify: { projectID: '67f36da0b0fcfccb2105e9a3' },
                 url: 'https://general-runtime.voiceflow.com',
                 assistant: {
                     extensions: [DateExtension],
@@ -228,164 +299,10 @@
                     url: "https://runtime-api.voiceflow.com"
                 }
             });
-
-            // Chat állapotának figyelése
-            window.addEventListener('message', (event) => {
-                if (event.data && typeof event.data === 'string') {
-                    const data = JSON.parse(event.data);
-                    if (data.type === 'voiceflow:open') {
-                        isChatOpen = true; // Chat megnyílt
-                        console.log('Chat window opened');
-                        blurTextArea();    // Chat megnyitásakor is meghívjuk
-                    } else if (data.type === 'voiceflow:close') {
-                        isChatOpen = false; // Chat bezárult
-                        console.log('Chat window closed');
-                    }
-                }
-            }, false);
-
-            // Első proaktív üzenet: csak a főoldalon 10 másodperc után
-            setTimeout(function() {
-                if (window.location.hash === '#fooldal' || window.location.hash === '') {
-                    console.log('Első proaktív üzenet küldése a főoldalon...');
-                    window.voiceflow.chat.proactive.clear();
-                    window.voiceflow.chat.proactive.push({ 
-                        type: 'text', 
-                        payload: { message: 'Kell fogász?' }
-                    });
-
-                    if (!isChatOpen) {
-                        console.log('Fogkő-eltávolítás esemény triggerelve');
-                        window.voiceflow.chat.interact({
-                            type: 'event',
-                            payload: {
-                                event: {
-                                    name: 'fogko_eltavolitas'
-                                }
-                            }
-                        });
-                    } else {
-                        console.log('Chat nyitva van, fogko_eltavolitas esemény nem triggerelve');
-                    }
-                }
-            }, 10000); // 10 másodperc
-
-            // Második proaktív üzenet: csak az Implantátumok oldalon 10 másodperc után
-            setTimeout(function() {
-                if (window.location.hash === '#implantatumok') {
-                    console.log('Második proaktív üzenet küldése az Implantátumok oldalon...');
-                    window.voiceflow.chat.proactive.clear();
-                    window.voiceflow.chat.proactive.push({ 
-                        type: 'text', 
-                        payload: { message: 'Érdekel egy AlphaBio MultiNeo implantátum?' }
-                    });
-
-                    if (!isChatOpen) {
-                        console.log('AlphaBio MultiNeo esemény triggerelve');
-                        window.voiceflow.chat.interact({
-                            type: 'event',
-                            payload: {
-                                event: {
-                                    name: 'alphabio_multineo_implantatum'
-                                }
-                            }
-                        });
-                    } else {
-                        console.log('Chat nyitva van, alphabio_multineo_implantatum esemény nem triggerelve');
-                    }
-                }
-            }, 10000); // 10 másodperc
-
-            // Shadow DOM figyelése a proaktív üzenet eléréséhez
-            const voiceflowChatElement = document.getElementById('voiceflow-chat');
-
-            const checkForProactiveMessage = () => {
-                try {
-                    if (voiceflowChatElement && voiceflowChatElement.shadowRoot) {
-                        const shadowRoot = voiceflowChatElement.shadowRoot;
-
-                        const observer = new MutationObserver((mutationsList, observer) => {
-                            for (const mutation of mutationsList) {
-                                const proactiveBubble = Array.from(shadowRoot.querySelectorAll('[class]'))
-                                    .find(element => Array.from(element.classList).some(className => className.startsWith('_6r9xee4')));
-
-                                if (proactiveBubble) {
-                                    console.log('Proaktív üzenet megtalálva:', proactiveBubble);
-                                    proactiveBubble.addEventListener('click', () => {
-                                        window.voiceflow.chat.open();
-                                        console.log('Proaktív üzenetre kattintottak, chat megnyitva');
-                                    });
-
-                                    observer.disconnect();
-                                    break;
-                                }
-                            }
-                        });
-
-                        observer.observe(shadowRoot, { childList: true, subtree: true });
-                    }
-                } catch (e) {
-                    console.error('Hiba a shadow DOM elérése során:', e);
-                }
-            };
-
-            // A dinamikus figyelés elindítása
-            checkForProactiveMessage();
-
-            // Megfigyelés indítása
-            const observeDOMChanges = () => {
-                if (checkForProactiveMessage()) return;
-
-                const observer = new MutationObserver((mutations) => {
-                    for (const mutation of mutations) {
-                        if (mutation.type === 'childList' || mutation.type === 'subtree') {
-                            if (checkForProactiveMessage()) {
-                                observer.disconnect();
-                                break;
-                            }
-                        }
-                    }
-                });
-
-                observer.observe(document.body, { 
-                    childList: true, 
-                    subtree: true 
-                });
-
-                const intervalId = setInterval(() => {
-                    if (checkForProactiveMessage()) {
-                        clearInterval(intervalId);
-                    }
-                }, 1000);
-            };
-
-            setTimeout(observeDOMChanges, 1000);
         };
         v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
         v.type = "text/javascript";
         s.parentNode.insertBefore(v, s);
-
-        function blurTextArea() {
-            console.log('blurTextArea függvény meghívva');
-            const voiceflowChatElement = document.getElementById('voiceflow-chat');
-            if (voiceflowChatElement) {
-                console.log('Voiceflow chat elem megtalálva');
-                try {
-                    const shadowRoot = voiceflowChatElement.shadowRoot;
-                    const textAreaElement = shadowRoot.querySelector('textarea');
-                    if (textAreaElement) {
-                        textAreaElement.blur();
-                        console.log('Fókusz eltávolítva a textarea-ról');
-                    } else {
-                        console.log('Textarea nem található a shadow DOM-ban');
-                    }
-                } catch (error) {
-                    console.error('Hiba a shadow DOM-ban való keresés közben:', error);
-                }
-            } else {
-                console.log('Voiceflow chat elem nem található');
-            }
-        }
     })(document, 'script');
     </script>
 </body>
