@@ -29,6 +29,8 @@
   border-left: 2px solid #48AEE1;
   border-right: 2px solid #48AEE1;
   border-top: 2px solid #48AEE1;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 }
 
 ._1gdvh9t1 {
@@ -44,6 +46,8 @@ display: none;
   border-left: 2px solid #48AEE1;
   border-right: 2px solid #48AEE1;
   border-bottom: 2px solid #48AEE1;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
 }
 
 ._1wkq7nf1 ._1vj16242 {
