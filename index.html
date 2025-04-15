@@ -97,44 +97,64 @@
         showPage(initialPageId);
 
         // Popup vezérlés
+        let inBookingFlow = false;
         let popupTimer = null;
+        let popupShown = false;
 
         function startPopupTimer() {
             console.log('Popup időzítő elindult');
             popupTimer = setTimeout(() => {
-                showPopup();
+                if (!inBookingFlow && !popupShown) {
+                    showPopup();
+                }
             }, 15000); // 15 másodperc
         }
 
         function showPopup() {
             const popup = document.getElementById('registerPopup');
             popup.style.display = 'flex';
+            popupShown = true;
             console.log('Popup megjelenik');
         }
 
-        // Voiceflow üzenetek figyelése a Discord válasz alapján
-        window.addEventListener('message', (event) => {
-            // Logoljuk az összes üzenetet hibakereséshez
-            if (event.origin.includes('voiceflow.com')) {
-                console.log('Voiceflow üzenet:', JSON.stringify(event.data, null, 2));
-            }
+        // Voiceflow üzenetek figyelése
+        function observeVoiceflowMessages() {
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.addedNodes.length) {
+                        mutation.addedNodes.forEach((node) => {
+                            if (node.nodeType === Node.ELEMENT_NODE) {
+                                const text = node.innerText || node.textContent;
+                                if (text === 'Válasszon várost:') {
+                                    inBookingFlow = true;
+                                    clearTimeout(popupTimer);
+                                    popupTimer = null;
+                                    console.log('Időpontfoglalás flow elkezdődött');
+                                } else if (text === 'Lefoglaltam az időpontot, köszi.') {
+                                    inBookingFlow = false;
+                                    if (!popupShown) {
+                                        startPopupTimer();
+                                    }
+                                    console.log('Időpontfoglalás flow véget ért');
+                                }
+                            }
+                        });
+                    }
+                });
+            });
 
-            // Ellenőrizzük a BOOKING_FLOW üzeneteket
-            if (event.data && event.data.type === 'BOOKING_FLOW') {
-                if (event.data.status === 'start') {
-                    // Töröljük a popup időzítőt
-                    clearTimeout(popupTimer);
-                    popupTimer = null;
-                    console.log('BOOKING_FLOW start: Popup időzítő törölve');
-                } else if (event.data.status === 'end') {
-                    // Újraindítjuk a popup időzítőt
-                    startPopupTimer();
-                    console.log('BOOKING_FLOW end: Popup időzítő újraindítva');
-                }
+            // Figyeljük a Voiceflow chat konténert
+            const chatContainer = document.querySelector('vf-runtime');
+            if (chatContainer) {
+                observer.observe(chatContainer, { childList: true, subtree: true });
+            } else {
+                console.log('Voiceflow konténer még nem található, újrapróbálkozás...');
+                setTimeout(observeVoiceflowMessages, 1000);
             }
-        });
+        }
 
-        // Indítsuk el a popup időzítőt az oldal betöltésekor
+        // Indítsuk a figyelést és a popup időzítőt
+        observeVoiceflowMessages();
         startPopupTimer();
     </script>
 
