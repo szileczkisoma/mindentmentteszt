@@ -35,7 +35,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Félátlátszó háttér */
+            background-color: rgba(0, 0, 0, 0.5);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -100,33 +100,42 @@
         let disablePopup = false; // Alapból a popup engedélyezve van
 
         function startPopupTimer() {
+            console.log('Popup időzítő elindult');
             setTimeout(() => {
+                console.log('Időzítő lejárt, disablePopup:', disablePopup);
                 if (!disablePopup) {
                     showPopup();
                 }
-            }, 15000); // 15 másodperc = 15000 ms
+            }, 15000); // 15 másodperc
         }
 
         function showPopup() {
             const popup = document.getElementById('registerPopup');
-            popup.style.display = 'flex'; // Megjelenítjük a popupot
+            popup.style.display = 'flex';
             console.log('Popup megjelenik');
         }
 
         // Voiceflow Custom Action események figyelése
         window.addEventListener('message', (event) => {
-            // Ellenőrizzük, hogy Voiceflow üzenet-e
+            // Logoljuk az összes Voiceflow üzenetet hibakereséshez
+            if (event.origin.includes('voiceflow.com')) {
+                console.log('Voiceflow üzenet érkezett:', JSON.stringify(event.data, null, 2));
+            }
+
+            // Ellenőrizzük, hogy Custom Action üzenet-e
             if (event.origin.includes('voiceflow.com') && event.data && event.data.type === 'action') {
                 const action = event.data;
+                console.log('Custom Action észlelve:', action);
+
                 // foglals_start esemény
-                if (action.action === 'foglals_start' || action.payload?.event === 'bookingFlowStart') {
-                    disablePopup = true; // Popup tiltása
-                    console.log('Időpontfoglalás flow elkezdődött, popup tiltva');
+                if (action.action === 'foglals_start' || (action.payload && action.payload.event === 'bookingFlowStart')) {
+                    disablePopup = true;
+                    console.log('foglals_start esemény → disablePopup = true');
                 }
                 // foglalas_vege esemény
-                else if (action.action === 'foglalas_vege' || action.payload?.event === 'bookingFlowEnd') {
-                    disablePopup = false; // Popup engedélyezése
-                    console.log('Időpontfoglalás flow véget ért, popup engedélyezve');
+                else if (action.action === 'foglalas_vege' || (action.payload && action.payload.event === 'bookingFlowEnd')) {
+                    disablePopup = false;
+                    console.log('foglalas_vege esemény → disablePopup = false');
                 }
             }
         });
@@ -135,7 +144,7 @@
         startPopupTimer();
     </script>
 
-    <!-- DateExtension script (változatlanul) -->
+    <!-- DateExtension script -->
     <script>
         const DateExtension = {
             name: 'Date',
@@ -281,7 +290,7 @@
         };
     </script>
 
-    <!-- Voiceflow script (változatlanul) -->
+    <!-- Voiceflow script -->
     <script type="text/javascript">
     (function(d, t) {
         var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
