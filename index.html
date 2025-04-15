@@ -97,7 +97,7 @@
         showPage(initialPageId);
 
         // Popup vezérlés
-        let disablePopup = false; // Alapból a popup engedélyezve van
+        let disablePopup = false;
 
         function startPopupTimer() {
             console.log('Popup időzítő elindult');
@@ -115,43 +115,41 @@
             console.log('Popup megjelenik');
         }
 
-        // Voiceflow Custom Action események figyelése
-        window.addEventListener('message', (event) => {
-            // Logoljuk az összes Voiceflow üzenetet hibakereséshez
-            if (event.origin.includes('voiceflow.com')) {
-                console.log('Voiceflow üzenet érkezett:', JSON.stringify(event.data, null, 2));
-            }
-
-            // Ellenőrizzük, hogy Custom Action üzenet-e
-            if (event.origin.includes('voiceflow.com') && event.data && event.data.type === 'action') {
-                const action = event.data;
-                console.log('Custom Action észlelve:', action);
-
-                // foglals_start esemény
-                if (action.action === 'foglals_start' || (action.payload && action.payload.event === 'bookingFlowStart')) {
+        // Új BookingFlowExtension a foglals_start és foglalas_vege kezelésére
+        const BookingFlowExtension = {
+            name: 'BookingFlow',
+            type: 'effect',
+            match: ({ trace }) => {
+                const isMatch = trace.type === 'action' && (
+                    trace.action === 'foglals_start' ||
+                    trace.action === 'foglalas_vege' ||
+                    (trace.payload && (
+                        trace.payload.event === 'bookingFlowStart' ||
+                        trace.payload.event === 'bookingFlowEnd'
+                    ))
+                );
+                console.log('BookingFlowExtension match:', trace, 'Result:', isMatch);
+                return isMatch;
+            },
+            effect: ({ trace }) => {
+                console.log('BookingFlowExtension effect fut:', trace);
+                if (trace.action === 'foglals_start' || (trace.payload && trace.payload.event === 'bookingFlowStart')) {
                     disablePopup = true;
-                    console.log('foglals_start esemény → disablePopup = true');
-                }
-                // foglalas_vege esemény
-                else if (action.action === 'foglalas_vege' || (action.payload && action.payload.event === 'bookingFlowEnd')) {
+                    console.log('foglals_start → disablePopup = true');
+                } else if (trace.action === 'foglalas_vege' || (trace.payload && trace.payload.event === 'bookingFlowEnd')) {
                     disablePopup = false;
-                    console.log('foglalas_vege esemény → disablePopup = false');
+                    console.log('foglalas_vege → disablePopup = false');
                 }
             }
-        });
+        };
 
-        // Indítsuk el a popup időzítőt az oldal betöltésekor
-        startPopupTimer();
-    </script>
-
-    <!-- DateExtension script -->
-    <script>
+        // DateExtension (változatlan)
         const DateExtension = {
             name: 'Date',
             type: 'response',
             match: ({ trace }) => {
                 const isMatch = trace.type === 'ext_date' || (trace.payload && trace.payload.name === 'ext_date');
-                console.log('Match called with trace:', trace, 'Result:', isMatch);
+                console.log('DateExtension match:', trace, 'Result:', isMatch);
                 return isMatch;
             },
             render: ({ trace, element }) => {
@@ -288,31 +286,39 @@
                 }, 100);
             },
         };
-    </script>
 
-    <!-- Voiceflow script -->
-    <script type="text/javascript">
-    (function(d, t) {
-        var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
-        v.onload = function() {
-            console.log('Voiceflow script betöltve');
-            window.voiceflow.chat.load({
-                verify: { projectID: '67f36da0b0fcfccb2105e9a3' },
-                url: 'https://general-runtime.voiceflow.com',
-                assistant: {
-                    extensions: [DateExtension],
-                    stylesheet: "https://szileczkisoma.github.io/mindentmentteszt/style.css"
-                },
-                versionID: 'production',
-                voice: {
-                    url: "https://runtime-api.voiceflow.com"
-                }
-            });
-        };
-        v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
-        v.type = "text/javascript";
-        s.parentNode.insertBefore(v, s);
-    })(document, 'script');
+        // Voiceflow script
+        (function(d, t) {
+            var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+            v.onload = function() {
+                console.log('Voiceflow script betöltve');
+                window.voiceflow.chat.load({
+                    verify: { projectID: '67f36da0b0fcfccb2105e9a3' },
+                    url: 'https://general-runtime.voiceflow.com',
+                    assistant: {
+                        extensions: [DateExtension, BookingFlowExtension],
+                        stylesheet: "https://szileczkisoma.github.io/mindentmentteszt/style.css"
+                    },
+                    versionID: 'production',
+                    voice: {
+                        url: "https://runtime-api.voiceflow.com"
+                    }
+                });
+            };
+            v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
+            v.type = "text/javascript";
+            s.parentNode.insertBefore(v, s);
+        })(document, 'script');
+
+        // Message eseményfigyelő hibakereséshez
+        window.addEventListener('message', (event) => {
+            if (event.origin.includes('voiceflow.com')) {
+                console.log('Voiceflow üzenet:', JSON.stringify(event.data, null, 2));
+            }
+        });
+
+        // Időzítő indítása
+        startPopupTimer();
     </script>
 </body>
 </html>
