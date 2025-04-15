@@ -97,15 +97,12 @@
         showPage(initialPageId);
 
         // Popup vezérlés
-        let disablePopup = false;
+        let popupTimer = null;
 
         function startPopupTimer() {
             console.log('Popup időzítő elindult');
-            setTimeout(() => {
-                console.log('Időzítő lejárt, disablePopup:', disablePopup);
-                if (!disablePopup) {
-                    showPopup();
-                }
+            popupTimer = setTimeout(() => {
+                showPopup();
             }, 15000); // 15 másodperc
         }
 
@@ -115,41 +112,40 @@
             console.log('Popup megjelenik');
         }
 
-        // Új BookingFlowExtension a foglals_start és foglalas_vege kezelésére
-        const BookingFlowExtension = {
-            name: 'BookingFlow',
-            type: 'effect',
-            match: ({ trace }) => {
-                const isMatch = trace.type === 'action' && (
-                    trace.action === 'foglals_start' ||
-                    trace.action === 'foglalas_vege' ||
-                    (trace.payload && (
-                        trace.payload.event === 'bookingFlowStart' ||
-                        trace.payload.event === 'bookingFlowEnd'
-                    ))
-                );
-                console.log('BookingFlowExtension match:', trace, 'Result:', isMatch);
-                return isMatch;
-            },
-            effect: ({ trace }) => {
-                console.log('BookingFlowExtension effect fut:', trace);
-                if (trace.action === 'foglals_start' || (trace.payload && trace.payload.event === 'bookingFlowStart')) {
-                    disablePopup = true;
-                    console.log('foglals_start → disablePopup = true');
-                } else if (trace.action === 'foglalas_vege' || (trace.payload && trace.payload.event === 'bookingFlowEnd')) {
-                    disablePopup = false;
-                    console.log('foglalas_vege → disablePopup = false');
+        // Voiceflow üzenetek figyelése a Discord válasz alapján
+        window.addEventListener('message', (event) => {
+            // Logoljuk az összes üzenetet hibakereséshez
+            if (event.origin.includes('voiceflow.com')) {
+                console.log('Voiceflow üzenet:', JSON.stringify(event.data, null, 2));
+            }
+
+            // Ellenőrizzük a BOOKING_FLOW üzeneteket
+            if (event.data && event.data.type === 'BOOKING_FLOW') {
+                if (event.data.status === 'start') {
+                    // Töröljük a popup időzítőt
+                    clearTimeout(popupTimer);
+                    popupTimer = null;
+                    console.log('BOOKING_FLOW start: Popup időzítő törölve');
+                } else if (event.data.status === 'end') {
+                    // Újraindítjuk a popup időzítőt
+                    startPopupTimer();
+                    console.log('BOOKING_FLOW end: Popup időzítő újraindítva');
                 }
             }
-        };
+        });
 
-        // DateExtension (változatlan)
+        // Indítsuk el a popup időzítőt az oldal betöltésekor
+        startPopupTimer();
+    </script>
+
+    <!-- DateExtension script (változatlan) -->
+    <script>
         const DateExtension = {
             name: 'Date',
             type: 'response',
             match: ({ trace }) => {
                 const isMatch = trace.type === 'ext_date' || (trace.payload && trace.payload.name === 'ext_date');
-                console.log('DateExtension match:', trace, 'Result:', isMatch);
+                console.log('Match called with trace:', trace, 'Result:', isMatch);
                 return isMatch;
             },
             render: ({ trace, element }) => {
@@ -286,39 +282,31 @@
                 }, 100);
             },
         };
+    </script>
 
-        // Voiceflow script
-        (function(d, t) {
-            var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
-            v.onload = function() {
-                console.log('Voiceflow script betöltve');
-                window.voiceflow.chat.load({
-                    verify: { projectID: '67f36da0b0fcfccb2105e9a3' },
-                    url: 'https://general-runtime.voiceflow.com',
-                    assistant: {
-                        extensions: [DateExtension, BookingFlowExtension],
-                        stylesheet: "https://szileczkisoma.github.io/mindentmentteszt/style.css"
-                    },
-                    versionID: 'production',
-                    voice: {
-                        url: "https://runtime-api.voiceflow.com"
-                    }
-                });
-            };
-            v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
-            v.type = "text/javascript";
-            s.parentNode.insertBefore(v, s);
-        })(document, 'script');
-
-        // Message eseményfigyelő hibakereséshez
-        window.addEventListener('message', (event) => {
-            if (event.origin.includes('voiceflow.com')) {
-                console.log('Voiceflow üzenet:', JSON.stringify(event.data, null, 2));
-            }
-        });
-
-        // Időzítő indítása
-        startPopupTimer();
+    <!-- Voiceflow script (változatlan) -->
+    <script type="text/javascript">
+    (function(d, t) {
+        var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+        v.onload = function() {
+            console.log('Voiceflow script betöltve');
+            window.voiceflow.chat.load({
+                verify: { projectID: '67f36da0b0fcfccb2105e9a3' },
+                url: 'https://general-runtime.voiceflow.com',
+                assistant: {
+                    extensions: [DateExtension],
+                    stylesheet: "https://szileczkisoma.github.io/mindentmentteszt/style.css"
+                },
+                versionID: 'production',
+                voice: {
+                    url: "https://runtime-api.voiceflow.com"
+                }
+            });
+        };
+        v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
+        v.type = "text/javascript";
+        s.parentNode.insertBefore(v, s);
+    })(document, 'script');
     </script>
 </body>
 </html>
