@@ -37,7 +37,15 @@
 
 ._1gdvh9t1 {
   height: 100px;
-  border: 1px solid #48AEE1;
+  border: 2px solid #48AEE1;
+}
+
+._1gdvh9t1:hover {
+  border: 2px solid #48AEE1;
+}
+
+._1gdvh9t1:focus {
+  border: 2px solid #48AEE1;
 }
 
 .dio4eo2 {
