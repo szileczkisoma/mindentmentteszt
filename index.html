@@ -29,42 +29,15 @@
         }
         /* Chat konténer stílusa */
         #chat-container {
-            width: 1000px; /* Sokkal szélesebb */
-            max-width: 90%; /* Reszponzív kisebb képernyőkre */
-            height: 700px; /* Magasabb */
+            width: 1000px;
+            max-width: 90%;
+            height: 700px;
             margin: 20px auto;
             background-color: #f9f9f9;
             border: 1px solid #ddd;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-        }
-        /* Popup stílusa */
-        .popup-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        .popup-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            max-width: 300px;
-            width: 80%;
-        }
-        .popup-content p {
-            color: black;
-            font-size: 18px;
-            margin: 0;
         }
     </style>
 </head>
@@ -92,12 +65,14 @@
         <p>Itt megismerheted implantátumainkat</p>
     </div>
 
-    <!-- Popup HTML -->
+    <!-- Popup HTML kikommentelve -->
+    <!--
     <div class="popup-overlay" id="registerPopup">
         <div class="popup-content">
             <p>Regisztrálj</p>
         </div>
     </div>
+    -->
 
     <script>
         // Oldalváltás logika
@@ -110,7 +85,8 @@
         const initialPageId = window.location.hash.slice(1) || 'fooldal';
         showPage(initialPageId);
 
-        // Popup vezérlés
+        // Popup vezérlés kikommentelve
+        /*
         let inBookingFlow = false;
         let popupTimer = null;
         let popupShown = false;
@@ -121,7 +97,7 @@
                 if (!inBookingFlow && !popupShown) {
                     showPopup();
                 }
-            }, 15000); // 15 másodperc
+            }, 15000);
         }
 
         function showPopup() {
@@ -130,6 +106,7 @@
             popupShown = true;
             console.log('Popup megjelenik');
         }
+        */
 
         // Voiceflow üzenetek figyelése (Shadow DOM)
         function observeVoiceflowMessages() {
@@ -149,16 +126,10 @@
                                     if (node.nodeType === Node.ELEMENT_NODE) {
                                         const text = node.innerText || node.textContent;
                                         console.log('Új üzenet (Shadow DOM):', text);
+                                        // Popup logika kikommentelve, de üzenet figyelés marad
                                         if (text === 'Válasszon várost:') {
-                                            inBookingFlow = true;
-                                            clearTimeout(popupTimer);
-                                            popupTimer = null;
                                             console.log('Időpontfoglalás flow elkezdődött');
                                         } else if (text === 'Lefoglaltam az időpontot, köszi.') {
-                                            inBookingFlow = false;
-                                            if (!popupShown) {
-                                                startPopupTimer();
-                                            }
                                             console.log('Időpontfoglalás flow véget ért');
                                         }
                                     }
@@ -177,15 +148,8 @@
                                         const text = node.innerText || node.textContent;
                                         console.log('Új üzenet (Shadow DOM Root):', text);
                                         if (text === 'Válasszon várost:') {
-                                            inBookingFlow = true;
-                                            clearTimeout(popupTimer);
-                                            popupTimer = null;
                                             console.log('Időpontfoglalás flow elkezdődött');
                                         } else if (text === 'Lefoglaltam az időpontot, köszi.') {
-                                            inBookingFlow = false;
-                                            if (!popupShown) {
-                                                startPopupTimer();
-                                            }
                                             console.log('Időpontfoglalás flow véget ért');
                                         }
                                     }
@@ -212,9 +176,8 @@
             }
         }
 
-        // Indítsuk a figyelést és a popup időzítőt
+        // Indítsuk a figyelést
         waitForVoiceflow();
-        startPopupTimer();
     </script>
 
     <!-- DateExtension script -->
