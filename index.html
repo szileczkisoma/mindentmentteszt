@@ -326,7 +326,7 @@
         };
     </script>
 
-    <!-- Voiceflow embedded script -->
+    <!-- Voiceflow embedded script autostarttal -->
     <script type="text/javascript">
         (function(d, t) {
             var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
@@ -340,13 +340,14 @@
                         url: "https://runtime-api.voiceflow.com"
                     },
                     assistant: {
-                        extensions: [DateExtension]
-                        //stylesheet: "https://szileczkisoma.github.io/mindentmentteszt/style.css"
+                        extensions: [DateExtension],
+                        stylesheet: "https://szileczkisoma.github.io/mindentmentteszt/style.css"
                     },
                     render: {
                         mode: 'embedded',
                         target: document.getElementById('chat-container')
-                    }
+                    },
+                    autostart: true
                 });
             };
             v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
