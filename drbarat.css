@@ -8,6 +8,10 @@
 
 .jyiuei7 {
   background-color: #ffffff;
+  border: none;
+  border-left: 2px solid #48AEE1;
+  border-right: 2px solid #48AEE1;
+  border-top: 2px solid #48AEE1;
 }
 
 .jyiuei7:hover {
