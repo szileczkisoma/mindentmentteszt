@@ -42,16 +42,16 @@
         .chat-section {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start; /* Balra igazítás a kép hangsúlyozására */
             margin: 20px auto;
-            max-width: 1200px;
+            max-width: 1400px; /* Nagyobb szélesség a kép számára */
             gap: 20px;
         }
         /* Kép stílusa */
         .chat-image {
-            max-width: 300px;
+            max-width: 400px; /* Nagyobb szélesség a kezek számára */
             height: 700px; /* Megegyezik a #chat-container magasságával */
-            object-fit: cover; /* Megőrzi a képarányt, kitölti a magasságot */
+            object-fit: contain; /* Teljes kép látható, arány megtartva */
             border-radius: 8px;
         }
     </style>
