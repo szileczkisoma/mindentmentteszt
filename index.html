@@ -117,38 +117,72 @@
             console.log('Popup megjelenik');
         }
 
-        // Voiceflow üzenetek figyelése
+        // Voiceflow üzenetek figyelése (Shadow DOM)
         function observeVoiceflowMessages() {
             const chatContainer = document.querySelector('#voiceflow-chat');
-            if (chatContainer) {
-                console.log('Voiceflow konténer megtalálva (#voiceflow-chat), figyelés indul');
-                const observer = new MutationObserver((mutations) => {
-                    mutations.forEach((mutation) => {
-                        if (mutation.addedNodes.length) {
-                            mutation.addedNodes.forEach((node) => {
-                                if (node.nodeType === Node.ELEMENT_NODE) {
-                                    const text = node.innerText || node.textContent;
-                                    console.log('Új üzenet:', text); // Hibakeresés
-                                    if (text === 'Válasszon várost:') {
-                                        inBookingFlow = true;
-                                        clearTimeout(popupTimer);
-                                        popupTimer = null;
-                                        console.log('Időpontfoglalás flow elkezdődött');
-                                    } else if (text === 'Lefoglaltam az időpontot, köszi.') {
-                                        inBookingFlow = false;
-                                        if (!popupShown) {
-                                            startPopupTimer();
+            if (chatContainer && chatContainer.shadowRoot) {
+                console.log('Voiceflow konténer és Shadow DOM megtalálva (#voiceflow-chat), figyelés indul');
+                const shadowRoot = chatContainer.shadowRoot;
+                
+                // Üzeneteket tartalmazó elem keresése (általános selector)
+                const messageContainer = shadowRoot.querySelector('div, section, [class*="message"], [class*="chat"]') || shadowRoot;
+                if (messageContainer) {
+                    console.log('Üzenet konténer megtalálva a Shadow DOM-ban');
+                    const observer = new MutationObserver((mutations) => {
+                        mutations.forEach((mutation) => {
+                            if (mutation.addedNodes.length) {
+                                mutation.addedNodes.forEach((node) => {
+                                    if (node.nodeType === Node.ELEMENT_NODE) {
+                                        const text = node.innerText || node.textContent;
+                                        console.log('Új üzenet (Shadow DOM):', text); // Hibakeresés
+                                        if (text === 'Válasszon várost:') {
+                                            inBookingFlow = true;
+                                            clearTimeout(popupTimer);
+                                            popupTimer = null;
+                                            console.log('Időpontfoglalás flow elkezdődött');
+                                        } else if (text === 'Lefoglaltam az időpontot, köszi.') {
+                                            inBookingFlow = false;
+                                            if (!popupShown) {
+                                                startPopupTimer();
+                                            }
+                                            console.log('Időpontfoglalás flow véget ért');
                                         }
-                                        console.log('Időpontfoglalás flow véget ért');
                                     }
-                                }
-                            });
-                        }
+                                });
+                            }
+                        });
                     });
-                });
-                observer.observe(chatContainer, { childList: true, subtree: true });
+                    observer.observe(messageContainer, { childList: true, subtree: true });
+                } else {
+                    console.log('Üzenet konténer nem található a Shadow DOM-ban, Shadow Root figyelése');
+                    const observer = new MutationObserver((mutations) => {
+                        mutations.forEach((mutation) => {
+                            if (mutation.addedNodes.length) {
+                                mutation.addedNodes.forEach((node) => {
+                                    if (node.nodeType === Node.ELEMENT_NODE) {
+                                        const text = node.innerText || node.textContent;
+                                        console.log('Új üzenet (Shadow DOM Root):', text);
+                                        if (text === 'Válasszon várost:') {
+                                            inBookingFlow = true;
+                                            clearTimeout(popupTimer);
+                                            popupTimer = null;
+                                            console.log('Időpontfoglalás flow elkezdődött');
+                                        } else if (text === 'Lefoglaltam az időpontot, köszi.') {
+                                            inBookingFlow = false;
+                                            if (!popupShown) {
+                                                startPopupTimer();
+                                            }
+                                            console.log('Időpontfoglalás flow véget ért');
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    });
+                    observer.observe(shadowRoot, { childList: true, subtree: true });
+                }
             } else {
-                console.log('Voiceflow konténer (#voiceflow-chat) még nem található, újrapróbálkozás...');
+                console.log('Voiceflow konténer vagy Shadow DOM nem található, újrapróbálkozás...');
                 setTimeout(observeVoiceflowMessages, 500);
             }
         }
