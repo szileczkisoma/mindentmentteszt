@@ -1,6 +1,6 @@
 .vfrc-chat {
-  border: 3px solid rgb(72, 174, 225) !important;
-  border-radius: 10px !important;
+  border: 3px solid rgb(72, 174, 225);
+  border-radius: 10px;
   background-color: rgb(235, 235, 235);
   height: 68vh;
   width: 20vw;
@@ -12,10 +12,10 @@
 }
 
 .vfrc-header {
-  height: 80px !important;
-  min-height: 80px !important;
-  background-color: white !important;
-  border-bottom: 3px solid rgb(72, 174, 225) !important;
+  height: 80px;
+  min-height: 80px;
+  background-color: white;
+  border-bottom: 3px solid rgb(72, 174, 225);
   position: relative;
   overflow: visible;
 }
@@ -30,7 +30,7 @@
 .vfrc-header .vfrc-avatar {
   height: 52px;
   width: 120px;
-  display: block !important;
+  display: block;
   overflow: visible;
   border-radius: 0%;
 }
@@ -84,54 +84,54 @@
 }
 
 .vfrc-system-response--actions .o231sh1:first-child .vfrc-button {
-  border-radius: 8px !important;
-  color: #f86c07 !important;
-  background-color: #fef0e6 !important;
-  line-height: 20px !important;
-  padding: 7px 12px 6px !important;
-  white-space: normal !important;
-  word-break: break-word !important;
-  text-align: left !important;
-  height: fit-content !important;
-  border: 1px solid #f86c07 !important;
-  outline: transparent 0px !important;
+  border-radius: 8px;
+  color: #f86c07;
+  background-color: #fef0e6;
+  line-height: 20px;
+  padding: 7px 12px 6px;
+  white-space: normal;
+  word-break: break-word;
+  text-align: left;
+  height: fit-content;
+  border: 1px solid #f86c07;
+  outline: transparent 0px;
 }
 
 
 
 .vfrc-system-response--actions .o231sh1:first-child .vfrc-button:hover {
-  background-color: #fdd8c3 !important;
-  color: #d95a00 !important;
+  background-color: #fdd8c3;
+  color: #d95a00;
 }
 
 .vfrc-prompt .vfrc-button:first-child {
-  position: relative !important;
-  color: transparent !important;
+  position: relative;
+  color: transparent;
 }
 
 .vfrc-prompt .vfrc-button:first-child::before {
-  content: "Új csevegés indítása" !important;
-  position: absolute !important;
-  inset: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  color: #ffffff !important;
+  content: "Új csevegés indítása";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
 }
 
 .vfrc-prompt .vfrc-button:nth-child(2) {
-  position: relative !important;
-  color: transparent !important;
+  position: relative;
+  color: transparent;
 }
 
 .vfrc-prompt .vfrc-button:nth-child(2)::before {
-  content: "Mégse" !important;
-  position: absolute !important;
-  inset: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  color: #000000 !important;
+  content: "Mégse";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000000;
 }
 
 .vfrc-proactive {
@@ -227,7 +227,7 @@
 }
 
   .vfrc-header .vfrc-avatar {
-  overflow: visible !important;
+  overflow: visible;
   height: 48px;
   width: 110px;
   
@@ -245,14 +245,14 @@
 
  .vfrc-proactive .vfrc-button {
     display: block;
-    position: relative !important;
+    position: relative;
   }
 
   .vfrc-proactive .vfrc-button .vfrc-icon {
-    position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
   .vfrc-system-response--actions .o231sh1:first-child .vfrc-button {
     font-size: 16px;
