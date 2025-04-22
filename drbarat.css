@@ -90,8 +90,16 @@ display: none;
 }
 
 .vfrc-avatar:not(.vfrc-header .vfrc-avatar):not(.vfrc-assistant-info .vfrc-avatar) {
-  height: 50px;
-  width: 50px;
+  height: 60px;
+  width: 60px;
   display: block;
   overflow: hidden;
+}
+
+._11kfxpg0 {
+  font-size: 16px;
+}
+
+._15emaa41 {
+  font-size: 16px;
 }
