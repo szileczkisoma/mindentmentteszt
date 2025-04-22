@@ -137,3 +137,22 @@ display: none;
   justify-content: center;
   color: #000000;
 }
+
+.vfrc-system-response--actions .o231sh1:first-child .vfrc-button {
+  border-radius: 8px;
+  color: #f86c07;
+  background-color: #fef0e6;
+  line-height: 20px;
+  padding: 7px 12px 6px;
+  white-space: normal;
+  word-break: break-word;
+  text-align: left;
+  height: fit-content;
+  border: 1px solid #f86c07;
+  outline: transparent 0px;
+}
+
+.vfrc-system-response--actions .o231sh1:first-child .vfrc-button:hover {
+  background-color: #fdd8c3;
+  color: #d95a00;
+}
