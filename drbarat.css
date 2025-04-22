@@ -1,3 +1,7 @@
+.vfrc-chat {
+  box-shadow: none;
+}
+
 .vfrc-header .vfrc-avatar {
   display: none;
 }
