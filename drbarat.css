@@ -107,3 +107,33 @@ display: none;
 ._1gdvh9tc {
   display: none;
 }
+
+.vfrc-prompt .vfrc-button:first-child {
+  position: relative;
+  color: transparent;
+}
+
+.vfrc-prompt .vfrc-button:first-child::before {
+  content: "Új csevegés indítása";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.vfrc-prompt .vfrc-button:nth-child(2) {
+  position: relative;
+  color: transparent;
+}
+
+.vfrc-prompt .vfrc-button:nth-child(2)::before {
+  content: "Mégse";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000000;
+}
