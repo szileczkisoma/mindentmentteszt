@@ -172,8 +172,8 @@ display: none;
 
   .vfrc-chat {
     width: 120%;
-    height: 800px;
-    max-height: 800px;
+    height: 700px;
+    max-height: 700px;
     position: relative;
     right: 30px;
   }
