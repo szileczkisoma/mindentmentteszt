@@ -4,6 +4,7 @@
   position: relative;
   right: 100px;
   background-color: #ffffff00;
+  max-width: 120%;
 }
 
 .vfrc-header .vfrc-avatar {
@@ -92,6 +93,7 @@ display: none;
 
 ._1vj16245 {
   background: none;
+  padding: 0;
 }
 
 .vfrc-avatar:not(.vfrc-header .vfrc-avatar):not(.vfrc-assistant-info .vfrc-avatar) {
