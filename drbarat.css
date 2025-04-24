@@ -166,3 +166,31 @@ display: none;
   height: 300px;
   max-height: 300px;
 }
+
+@media (max-width: 768px) {
+  /* Mobilos stílusok ide jönnek */
+
+  .vfrc-chat {
+    width: 100%;
+    right: 0;
+  }
+
+  ._1wkq7nf1 .s9t60i6 {
+    height: auto;
+    max-height: none;
+  }
+
+  ._1q15b0b5 {
+    margin-top: 20%;
+  }
+
+  ._11kfxpg0,
+  ._15emaa41 {
+    font-size: 14px;
+  }
+
+  .vfrc-system-response--actions .o231sh1:first-child .vfrc-button {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+}
