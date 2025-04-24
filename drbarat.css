@@ -171,8 +171,11 @@ display: none;
   /* Mobilos stílusok ide jönnek */
 
   .vfrc-chat {
-    width: 100%;
-    right: 0;
+    width: 120%;
+    height: 800px;
+    max-height: 800px;
+    position: relative;
+    right: 30px;
   }
 
   ._1wkq7nf1 .s9t60i6 {
@@ -186,7 +189,7 @@ display: none;
 
   ._11kfxpg0,
   ._15emaa41 {
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .vfrc-system-response--actions .o231sh1:first-child .vfrc-button {
