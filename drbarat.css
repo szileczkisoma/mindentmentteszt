@@ -196,4 +196,8 @@ display: none;
     font-size: 14px;
     padding: 6px 10px;
   }
+
+  .jsli365 {
+    max-width: 100%;
+  }
 }
