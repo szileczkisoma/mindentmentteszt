@@ -1,10 +1,8 @@
 .vfrc-chat {
   box-shadow: none;
-  width: 120%;
-  position: relative;
-  right: 100px;
-  background-color: #ffffff00;
-  max-width: 120%;
+  width: 100%;
+  background-color: #ffffff;
+  max-width: 100%;
 }
 
 .vfrc-header .vfrc-avatar {
@@ -42,7 +40,7 @@
   border-top: 2px solid #48AEE1;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
-  background-color: #ffffff00;
+  background-color: #ffffff;
 }
 
 ._1gdvh9t1 {
