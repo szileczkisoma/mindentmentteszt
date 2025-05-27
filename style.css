@@ -97,8 +97,6 @@
   outline: transparent 0px;
 }
 
-
-
 .vfrc-system-response--actions .o231sh1:first-child .vfrc-button:hover {
   background-color: #fdd8c3;
   color: #d95a00;
@@ -202,6 +200,44 @@
     font-size: 13px;
  }
 
+/* BILLENTYŰZET BLOKKOLÁS - ANDROID FIX */
+/* Általános textarea és input mezők kezelése */
+.vfrc-chat-input,
+._1gdvh9t6,
+._1gdvh9t8 textarea {
+    -webkit-user-select: none !important;
+    -webkit-touch-callout: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Android specifikus beállítások */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    .vfrc-chat-input,
+    ._1gdvh9t6,
+    ._1gdvh9t8 textarea {
+        transform: translateZ(0) !important;
+        -webkit-appearance: none !important;
+    }
+}
+
+/* Autofocus attribútum hatásának semlegesítése */
+.vfrc-chat-input[autofocus],
+._1gdvh9t6[autofocus],
+._1gdvh9t8 textarea[autofocus] {
+    pointer-events: none !important;
+    animation: enableInputDelayed 0.5s ease-in-out 0.5s forwards;
+}
+
+/* Animáció az input újraaktiválásához */
+@keyframes enableInputDelayed {
+    from {
+        pointer-events: none;
+    }
+    to {
+        pointer-events: auto;
+    }
+}
+
 @media (max-width: 768px) {
   .vfrc-chat {
     width: 95vw;
@@ -213,7 +249,6 @@
     overflow: visible;
   }
   
-
   .jsli361 {
   width: 255px;
   margin: 0 auto;
@@ -265,4 +300,14 @@
   ._1gdvh9t8::placeholder {
     font-size: 16px;
   }
-} 
+
+  /* MOBIL SPECIFIKUS BILLENTYŰZET BLOKKOLÁS */
+  .vfrc-chat-input,
+  ._1gdvh9t6,
+  ._1gdvh9t8 textarea {
+      -webkit-user-select: none !important;
+      -webkit-touch-callout: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+      transform: translateZ(0) !important;
+  }
+}
