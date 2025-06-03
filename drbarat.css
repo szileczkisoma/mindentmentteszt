@@ -120,7 +120,7 @@ display: none;
 }
 
 .vfrc-prompt .vfrc-button:first-child::before {
-  content: "Új csevegés indítása";
+  content: "Új Beszélgetés indítása!";
   position: absolute;
   inset: 0;
   display: flex;
