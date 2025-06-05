@@ -29,6 +29,29 @@
   bottom: 2px;
 }
 
+/* Tooltip szöveg */
+._1t7e06e0::after {
+  content: "Ez a tooltip szöveg"; /* ← Itt írd át */
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: black;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 999;
+}
+
+/* Hover-re jelenik meg */
+._1t7e06e0:hover::after {
+  opacity: 1;
+}
+
 ._1t7e06e0:hover {
   color: #ffffff;
 }
