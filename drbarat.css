@@ -17,35 +17,10 @@
 .jyiuei7 {
   background-color: #ffffff;
   border: 1px solid #48AEE1;
-  position: relative;
-  cursor: pointer;
 }
 
 .jyiuei7:hover {
   background-color: #48AEE1;
-}
-
-/* Tooltip */
-.jyiuei7::after {
-  content: "Új beszélgetés indítása!"; /* ← Itt írd át a szöveget */
-  position: absolute;
-  bottom: 125%; /* elem fölé helyezés */
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: black;
-  color: white;
-  padding: 6px 10px;
-  border-radius: 5px;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease-in-out;
-  z-index: 9999;
-}
-
-/* Hover-re jelenik meg */
-.jyiuei7:hover::after {
-  opacity: 1;
 }
 
 ._1t7e06e0 {
