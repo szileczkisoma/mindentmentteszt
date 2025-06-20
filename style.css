@@ -206,6 +206,7 @@
 @media (max-width: 768px) {
   .vfrc-chat {
     width: 95vw;
+    min-width: calc(100vw - 26px);
     height: 68vh;
     bottom: 20px;
     right: 5px;
