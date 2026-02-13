@@ -67,12 +67,13 @@
 .vfrc-assistant-info .vfrc-avatar {
   height: 140px;
   width: 240px;
-  box-shadow: 0;
+  box-shadow: initial;
   display: block;
   overflow: visible;
   position: relative;
   top: 20px;
   border-radius: 0%;
+  background: transparent;
 }
 
 .vfrc-assistant-info--description {
@@ -268,3 +269,4 @@
     font-size: 16px;
   }
 } 
+
