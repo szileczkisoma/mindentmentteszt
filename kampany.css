@@ -52,6 +52,8 @@ padding-right: 20px;
 
 ._1nzwwii4 {
   visibility: visible;
+  font-size: 0;
+  position: relative;
 }
 
 ._1mt9pkg2 {
@@ -62,5 +64,12 @@ padding-right: 20px;
 ._1mt9pkg2::after {
   content: "A beszélgetés véget ért.";
   font-size: 14px; 
+  color: inherit;
+}
+
+._1nzwwii4::after {
+  content: "Új beszélgetés indítása";
+  font-size: 14px;        /* állítsd az eredeti méretre */
+  font-weight: 600;       /* félkövér */
   color: inherit;
 }
