@@ -25,4 +25,11 @@
   position: relative;
   left: 50%;
   transform: translateX(-50%);
+  visibility: visible;
+  position: relative;
+  top: 20px;
+}
+
+.ck2fbe1 ._1vj16242 {
+  visibility: hidden;
 }
