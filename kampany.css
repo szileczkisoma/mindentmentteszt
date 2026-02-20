@@ -1,9 +1,5 @@
 .s9t60i1 {
   max-height: 60vh;
-
-  border-top: 2px solid #48AEE1;
-  border-left: 2px solid #48AEE1;
-  border-right: 2px solid #48AEE1;
   border-bottom: none;
   border-radius: 15px 15px 0 0;
 }
@@ -19,6 +15,7 @@
 
 .vfrc-chat {
   overflow: visible;
+  border: 2px solid #48AEE1;
 }
 
 ._1gdvh9t0 {
