@@ -70,3 +70,10 @@ padding-right: 20px;
   font-weight: 600;       /* félkövér */
   color: inherit;
 }
+
+
+@media (max-width: 768px) {
+  .vfrc-chat {
+    border-radius: 16px;
+  }
+}
