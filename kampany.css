@@ -50,3 +50,17 @@ padding-right: 20px;
   align-items: center;
 }
 
+._1nzwwii4 {
+  visibility: visible;
+}
+
+._1mt9pkg2 {
+  font-size: 0;
+  position: relative;
+}
+
+._1mt9pkg2::after {
+  content: "A beszélgetés véget ért.";
+  font-size: 14px; 
+  color: inherit;
+}
