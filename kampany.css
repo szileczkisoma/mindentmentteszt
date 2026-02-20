@@ -1,20 +1,18 @@
 .s9t60i1 {
   max-height: 60vh;
+
+  border-top: 2px solid #48AEE1;
+  border-left: 2px solid #48AEE1;
+  border-right: 2px solid #48AEE1;
+  border-bottom: none;
+  border-radius: 15px 15px 0 0;
 }
 
 .vfrc-header {
   display: none;
 }
 
-.s9t60i1 {
-   border-top: 2px solid #48AEE1;
-  border-left: 2px solid #48AEE1;
-  border-right: 2px solid #48AEE1;
-  border-bottom: none;
-  border-radius: 15px;
-}
-
-.1vj16245 {
+.\31 vj16245 {
   padding: 0;
 }
 
@@ -22,7 +20,7 @@
   overflow: visible;
 }
 
-.1gdvh9t0 {
+.\31 gdvh9t0 {
   width: 104%;
   position: relative;
   left: 50%;
