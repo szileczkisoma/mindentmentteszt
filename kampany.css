@@ -29,6 +29,7 @@
   visibility: visible;
   position: relative;
   top: 20px;
+  height: 60px
 }
 
 .ck2fbe1 ._1vj16242 {
@@ -44,3 +45,8 @@
 ._1gdvh9t2 {
 padding-right: 20px;
 }
+
+._1gdvh9td {
+  align-items: center;
+}
+
